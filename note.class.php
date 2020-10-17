@@ -54,7 +54,7 @@ class Note {
     
     function full_html() {
         return "<div id=\"$this->basename\" class=\"note $this->type\" data-filename=\"$this->fname\">
-                    <div class=\"date\">$this->date</div>
+                    <div class=\"date\"><time>$this->date</time></div>
                     <div class=\"content\">" . $this->content_as_html() . "</div>
                     <div class=\"controls\">
                         <!-- <span class=\"edit\">edit/info</span> -->

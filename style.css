@@ -1,6 +1,6 @@
 /* Main content */
 
-.main {
+.wrapper {
     box-sizing: border-box;
     max-width: 800px;
     padding: 0.5em;
@@ -11,7 +11,7 @@
 
 /* General text style */
 
-.main * {
+.wrapper * {
     font-family: sans-serif;
 }
 

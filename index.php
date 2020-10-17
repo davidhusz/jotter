@@ -30,18 +30,22 @@
 		<title>Notes</title>
 	</head>
 	<body>
-	    <div class="main">
-            <h1>Notes</h1>
+	    <div class="wrapper">
+	        <header>
+                <h1>Notes</h1>
+            </header>
             <noscript>
                 You have disabled JavaScript. Interactive components, such as the copy or the delete function, will not work correctly.
             </noscript>
-	        <div class="note-list">
-	            <?php
-                    foreach ($notes as $note) {
-                        echo $note->full_html();
-                    }
-	            ?>
-            </div>
+            <main>
+	            <div class="note-list">
+	                <?php
+                        foreach ($notes as $note) {
+                            echo $note->full_html();
+                        }
+	                ?>
+                </div>
+            </main>
             <div class="notification"></div>
         </div>
 	</body>
