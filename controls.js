@@ -52,7 +52,8 @@ function copyNoteToClipboard(note) {
 //                      .then(() => console.log("Successfully copied to clipboard"),
 //                            () => console.error("Copying to clipboard failed"));
           } else {
-            navigator.clipboard.writeText(window.location + note.filepath);
+            // make sure GET parameters are excluded
+            navigator.clipboard.writeText(location.href.replace(location.search, "") + note.filepath);
 //                      .then(() => console.log("Successfully copied to clipboard"),
 //                            () => console.error("Copying to clipboard failed"));
           }
