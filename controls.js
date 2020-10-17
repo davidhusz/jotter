@@ -35,7 +35,7 @@ function copyNoteToClipboard(note) {
   fetch("contents/" + note.filename)
     .then(response => response.text())
     .then(function(noteContent) {
-      noteContent = noteContent.trim();
+      noteContent = noteContent.trimEnd();
       if (navigator.clipboard !== undefined) {
         // this only works with https apparently
         try {
