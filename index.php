@@ -1,3 +1,25 @@
+<?php
+    require "note.class.php";
+    $fnames = scandir("contents", SCANDIR_SORT_DESCENDING);
+    if (isset($_GET["count"])) {
+        $fnames = array_slice($fnames, 0, $_GET["count"]);
+    }
+    $notes = [];
+    foreach ($fnames as $fname) {
+        $fpath = "contents/$fname";
+        // ignore hidden directories and files
+        if ($fname[0] != ".") {
+            $notes[] = Note::of_unknown_type($fpath);
+        }
+    }
+    if ($_SERVER["HTTP_ACCEPT"] == "application/json") {
+        header("Content-Type: application/json;charset=utf-8");
+        foreach ($notes as $note) {
+            echo $note->content_as_json()."\n";
+        }
+        exit();
+    }
+?>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -15,18 +37,8 @@
             </noscript>
 	        <div class="note-list">
 	            <?php
-	                require "note.class.php";
-	                $fnames = scandir("contents", SCANDIR_SORT_DESCENDING);
-	                if (isset($_GET["count"])) {
-	                    $fnames = array_slice($fnames, 0, $_GET["count"]);
-	                }
-                    foreach ($fnames as $fname) {
-                        $fpath = "contents/$fname";
-                        // ignore hidden directories and files
-                        if ($fname[0] != ".") {
-                            $note = Note::of_unknown_type($fpath);
-                            echo $note->full_html();
-                        }
+                    foreach ($notes as $note) {
+                        echo $note->full_html();
                     }
 	            ?>
             </div>
