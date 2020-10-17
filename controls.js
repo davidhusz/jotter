@@ -8,7 +8,9 @@ window.onload = function() {
       let buttonType = button.classList[0];
       let note = {
         container: button.parentNode.parentNode,
-        filename: button.parentNode.parentNode.dataset.filename,
+//        filepath: button.parentNode.parentNode.querySelector(".download").getAttribute("href"),
+        filepath: button.parentNode.parentNode.dataset.filepath,
+        filename: button.parentNode.parentNode.dataset.filepath.split("/").pop(),
         type: button.parentNode.parentNode.classList[1],
         notification: {
           success: button.dataset.notificationOnSuccess,
@@ -32,7 +34,7 @@ window.onload = function() {
 var notificationTimeout;
 
 function copyNoteToClipboard(note) {
-  fetch("contents/" + note.filename)
+  fetch(note.filepath)
     .then(response => response.text())
     .then(function(noteContent) {
       noteContent = noteContent.trimEnd();
@@ -50,7 +52,7 @@ function copyNoteToClipboard(note) {
 //                      .then(() => console.log("Successfully copied to clipboard"),
 //                            () => console.error("Copying to clipboard failed"));
           } else {
-            navigator.clipboard.writeText(window.location + "contents/" + note.filename);
+            navigator.clipboard.writeText(window.location + note.filepath);
 //                      .then(() => console.log("Successfully copied to clipboard"),
 //                            () => console.error("Copying to clipboard failed"));
           }
