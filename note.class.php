@@ -2,13 +2,18 @@
 class Note {
     function __construct($fpath) {
         $this->fpath = $fpath;
-        // No, I did not confuse these two commands, the options
-        // are really just that confusingly named
-        $this->fname = pathinfo($fpath, PATHINFO_BASENAME);
-        $this->basename = pathinfo($fpath, PATHINFO_FILENAME);
-        $last_modified = filemtime($fpath);
-        $this->date = date("D d M Y H:i T", $last_modified);
-        $this->date_iso = date("c", $last_modified);
+//        preg_match("/^(.*\/)?(((\d+)-\d+)-?((?:.+)?\.(.+)))$/", $this->fpath, $match);
+        // use the below regex for now, but the above one once all the file names follow the established pattern
+        preg_match("/^(.*\/)?(((\d+)(?:-\d+)?)-?((?:.+)?\.(.+)))$/", $this->fpath, $match);
+        list($_,
+             $this->fdir,
+             $this->fname,
+             $this->id,
+             $this->date_unix,
+             $this->original_filename,
+             $this->extension) = $match;
+        $this->date_human = date("D d M Y H:i T", $this->date_unix);
+        $this->date_iso = date("c", $this->date_unix);
     }
     
     static function of_unknown_type($fpath) {
@@ -55,8 +60,8 @@ class Note {
     }
     
     function full_html() {
-        return "<div id=\"$this->basename\" class=\"note $this->type\" data-filename=\"$this->fname\">
-                    <div class=\"date\"><time datetime=\"$this->date_iso\">$this->date</time></div>
+        return "<div id=\"$this->id\" class=\"note $this->type\" data-filename=\"$this->fname\">
+                    <div class=\"date\"><time datetime=\"$this->date_iso\">$this->date_human</time></div>
                     <div class=\"content\">" . $this->content_as_html() . "</div>
                     <div class=\"controls\">
                         <!-- <span class=\"edit\">edit/info</span> -->
@@ -113,7 +118,7 @@ class TextNote extends Note {
     
     function content_as_json() {
         $info = [
-            "id" => preg_replace("/^(\d+-\d+).*$/", "$1", $this->fname),
+            "id" => $this->id,
             "content" => $this->content,
             "filepath" => $this->fpath
         ];
