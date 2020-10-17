@@ -6,7 +6,9 @@ class Note {
         // are really just that confusingly named
         $this->fname = pathinfo($fpath, PATHINFO_BASENAME);
         $this->basename = pathinfo($fpath, PATHINFO_FILENAME);
-        $this->date = date("D d M Y H:i T", filemtime($fpath));
+        $last_modified = filemtime($fpath);
+        $this->date = date("D d M Y H:i T", $last_modified);
+        $this->date_iso = date("c", $last_modified);
     }
     
     static function of_unknown_type($fpath) {
@@ -54,7 +56,7 @@ class Note {
     
     function full_html() {
         return "<div id=\"$this->basename\" class=\"note $this->type\" data-filename=\"$this->fname\">
-                    <div class=\"date\"><time>$this->date</time></div>
+                    <div class=\"date\"><time datetime=\"$this->date_iso\">$this->date</time></div>
                     <div class=\"content\">" . $this->content_as_html() . "</div>
                     <div class=\"controls\">
                         <!-- <span class=\"edit\">edit/info</span> -->
