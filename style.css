@@ -1,0 +1,117 @@
+/* Main content */
+
+.main {
+    box-sizing: border-box;
+    max-width: 800px;
+    padding: 0.5em;
+/*    margin: 1em auto; */
+    margin: auto;
+}
+
+
+/* General text style */
+
+.main * {
+    font-family: sans-serif;
+}
+
+a {
+    text-decoration: none;
+    color: darkcyan;  /* or maybe lightseagreen, or mediumaquamarine */
+}
+
+a:hover, .controls > *:hover, .notification span:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+
+/* Note container */
+
+.note {
+    text-align: justify;
+    padding: 0.5em 0;
+    border: dashed thin silver;
+    border-left: 0;
+    border-right: 0;
+    /*
+    max-height: 10em;
+    overflow: scroll;
+    scrollbar-width: none;
+    */
+    position: relative;
+}
+
+.note:not(:last-child) {
+    border-bottom: 0;
+}
+
+.note img, .note video {
+    max-width: 50%;
+    max-height: 15em;
+}
+
+.note.removed {
+    display: none;
+}
+
+
+/* Date container */
+
+.date {
+    font-style: italic;
+    font-size: smaller;
+    color: gray;
+}
+
+
+/* Note controls */
+
+.controls {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: white;
+    padding-bottom: inherit;
+    padding-left: 0.2em;
+    box-shadow: -0.2em -0.2em 0.2em white;
+}
+
+.controls > * {
+    font-size: smaller;
+    color: #6f8fae;
+}
+
+
+/* Notifications */
+
+.notification {
+    background: gray;
+    color: white;
+    padding: 0.5em;
+    border-radius: 7px;
+    position: fixed;
+    bottom: 1em;
+    left: 50%;
+    transform: translateX(-50%);  /* probably not the nicest way of doing this */
+}
+
+.notification span {
+    font-weight: bold;
+}
+
+.notification span:hover {
+    text-decoration-thickness: 2px;
+}
+
+
+/* Fade in/out effects */
+
+.controls, .notification {
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.note:hover .controls, .notification.active {
+    opacity: 1;
+}
