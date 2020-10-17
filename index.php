@@ -17,6 +17,9 @@
 	            <?php
 	                require "note.class.php";
 	                $fnames = scandir("contents", SCANDIR_SORT_DESCENDING);
+	                if (isset($_GET["count"])) {
+	                    $fnames = array_slice($fnames, 0, $_GET["count"]);
+	                }
                     foreach ($fnames as $fname) {
                         $fpath = "contents/$fname";
                         // ignore hidden directories and files
