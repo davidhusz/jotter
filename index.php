@@ -19,8 +19,8 @@
 	                $fnames = scandir("contents", SCANDIR_SORT_DESCENDING);
                     foreach ($fnames as $fname) {
                         $fpath = "contents/$fname";
-                        // ignore directories and hidden files
-                        if (!is_dir($fpath) && $fname[0] != ".") {
+                        // ignore hidden directories and files
+                        if ($fname[0] != ".") {
                             $note = Note::of_unknown_type($fpath);
                             echo $note->full_html();
                         }

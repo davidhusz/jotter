@@ -4,7 +4,7 @@
         if (isset($_POST["file"])) {
             $fname = $_POST["file"];
             $fpath = "../contents/$fname";
-            $trash = "../contents/trash";
+            $trash = "../contents/.trash";
             if (file_exists($fpath)) {
                 rename($fpath, "$trash/$fname");
                 // echo "Successfully deleted $fname\n";

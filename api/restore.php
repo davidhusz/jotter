@@ -3,7 +3,7 @@
         // File restoration
         if (isset($_POST["file"])) {
             $fname = $_POST["file"];
-            $fpath = "../contents/trash/$fname";
+            $fpath = "../contents/.trash/$fname";
             $contents = "../contents";
             if (file_exists($fpath)) {
                 rename($fpath, "$contents/$fname");
