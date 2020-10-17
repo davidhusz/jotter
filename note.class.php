@@ -76,12 +76,12 @@ class TextNote extends Note {
     function __construct($fpath) {
         parent::__construct($fpath);
         $this->type = "text";
+        $this->content = rtrim(file_get_contents($this->fpath), "\n");
     }
     
     function content_as_html() {
-        $content = file_get_contents($this->fpath);
-        $content = nl2br(htmlspecialchars(trim($content)));
-        $content = preg_replace_callback(
+        $this->content = nl2br(htmlspecialchars($this->content));
+        $this->content = preg_replace_callback(
             '/(https?:\/\/)' .                           // protocol
             '([A-Za-z0-9\.-]+)' .                        // domain
             '(\/[A-Za-z0-9\.\(\)~%:?(&amp;)=_-]+)*\/?/', // path
@@ -105,8 +105,17 @@ class TextNote extends Note {
                 $link = "<a href=\"$url\">$title</a>";
                 return $link;
             },
-            $content);
-        return $content;
+            $this->content);
+        return $this->content;
+    }
+    
+    function content_as_json() {
+        $info = [
+            "id" => preg_replace("/^(\d+-\d+).*$/", "$1", $this->fname),
+            "content" => $this->content,
+            "filepath" => $this->fpath
+        ];
+        return json_encode($info);
     }
 }
 
