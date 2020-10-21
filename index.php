@@ -22,17 +22,17 @@
 ?>
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<link rel="icon" type="image/png" href="favicon.png">
-		<link rel="stylesheet" href="style.css">
-		<script type="text/javascript" src="controls.js"></script>
-		<script type="text/javascript" src="newnote.js"></script>
-		<title>Notes</title>
-	</head>
-	<body>
-	    <div class="main-wrapper">
-	        <header>
+    <head>
+        <meta charset="utf-8">
+        <link rel="icon" type="image/png" href="favicon.png">
+        <link rel="stylesheet" href="style.css">
+        <script type="text/javascript" src="controls.js"></script>
+        <script type="text/javascript" src="newnote.js"></script>
+        <title>Notes</title>
+    </head>
+    <body>
+        <div class="main-wrapper">
+            <header>
                 <h1>Notes</h1>
                 <noscript>
                     You have disabled JavaScript. Interactive components, such as the copy or the delete function, will not work correctly.
@@ -42,12 +42,12 @@
                 </div>
             </header>
             <main>
-	            <div class="note-list">
-	                <?php
+                <div class="note-list">
+                    <?php
                         foreach ($notes as $note) {
                             echo $note->full_html();
                         }
-	                ?>
+                    ?>
                 </div>
             </main>
             <div class="new-note">
@@ -78,5 +78,5 @@
             </div>
             <div class="notification"></div>
         </div>
-	</body>
+    </body>
 </html>
