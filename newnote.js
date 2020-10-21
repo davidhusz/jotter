@@ -14,29 +14,29 @@ function getNoteForm() {
 }
 
 function showNoteForm() {
-    let formContainer = getNoteForm();
-    let form = formContainer.querySelector("form");
-    let contentBox = formContainer.querySelector("textarea");
-    formContainer.classList.add("active");
-    
-    contentBox.focus();
-    contentBox.addEventListener("keydown", function(event) {
-      if (event.ctrlKey && event.key == "Enter") {
-        submitNoteForm();
-      }
-    });
-    
-    form.addEventListener("submit", function(event) {
-        event.preventDefault();
-        submitNoteForm();
-    });
-    
-    window.addEventListener("click", function(event) {
-        let modal = getNoteForm().querySelector(".modal");
-        if (!modal.contains(event.target)) {
-            hideNoteForm();
-        }
-    });
+  let formContainer = getNoteForm();
+  let form = formContainer.querySelector("form");
+  let contentBox = formContainer.querySelector("textarea");
+  formContainer.classList.add("active");
+  
+  contentBox.focus();
+  contentBox.addEventListener("keydown", function(event) {
+    if (event.ctrlKey && event.key == "Enter") {
+      submitNoteForm();
+    }
+  });
+  
+  form.addEventListener("submit", function(event) {
+      event.preventDefault();
+      submitNoteForm();
+  });
+  
+  window.addEventListener("click", function(event) {
+    let modal = getNoteForm().querySelector(".modal");
+    if (!modal.contains(event.target)) {
+      hideNoteForm();
+    }
+  });
 }
 
 function hideNoteForm() {
