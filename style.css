@@ -98,12 +98,12 @@ kbd {
 /* New note form */
 
 .new-note {
-    display: none;
     position: fixed;
     width: 100%;
     height: 100%;
     top: 0;
     left: 0;
+    z-index: -1;
 }
 
 .new-note .wrapper1-relative {
@@ -134,6 +134,7 @@ kbd {
 }
 
 .new-note .modal {
+    display: none;
     position: absolute;
     width: 75%;
 /*    height: 50%; */
@@ -188,7 +189,8 @@ kbd {
     transition: opacity 0.2s;
 }
 
-.note:hover .controls, .active {
+.note:hover .controls, .active, .active .modal {
     display: initial;
     opacity: 1;
+    z-index: 0;
 }
