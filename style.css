@@ -162,7 +162,7 @@ kbd {
 /* Notifications */
 
 .notification {
-    background: gray;
+    background: rgba(128, 128, 128, 0.8);
     color: white;
     padding: 0.5em;
     border-radius: 7px;
