@@ -1,6 +1,6 @@
 /* Main content */
 
-.wrapper {
+.main-wrapper {
     box-sizing: border-box;
     max-width: 800px;
     padding: 0.5em;
@@ -11,18 +11,30 @@
 
 /* General text style */
 
-.wrapper * {
+.main-wrapper * {
     font-family: sans-serif;
+    box-sizing: border-box;
 }
 
-a {
+a, .clickable {
     text-decoration: none;
     color: darkcyan;  /* or maybe lightseagreen, or mediumaquamarine */
 }
 
-a:hover, .controls > *:hover, .notification span:hover {
+a:hover, .clickable:hover, .controls > *:hover, .notification span:hover {
     text-decoration: underline;
     cursor: pointer;
+}
+
+kbd {
+    border: solid thin black;
+}
+
+
+/* Instructions header */
+
+.instructions {
+    text-align: right;
 }
 
 
@@ -83,6 +95,70 @@ a:hover, .controls > *:hover, .notification span:hover {
 }
 
 
+/* New note form */
+
+.new-note {
+    display: none;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.new-note .wrapper1-relative {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.new-note .shadow-background {
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.new-note .wrapper2-absolute {
+    position: absolute;
+    width: min(100%, 800px);
+    height: 100%;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.new-note .wrapper3-relative {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.new-note .modal {
+    position: absolute;
+    width: 75%;
+/*    height: 50%; */
+    padding: 1em;
+    background: white;
+    border: solid thin black;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.new-note .close-button {
+    float: right;
+}
+
+.new-note .contentbox, .new-note .contentbox * {
+    width: 100%;
+    height: 100%;
+}
+
+.new-note .submit-button {
+    float: right;
+}
+
+
 /* Notifications */
 
 .notification {
@@ -107,11 +183,12 @@ a:hover, .controls > *:hover, .notification span:hover {
 
 /* Fade in/out effects */
 
-.controls, .notification {
+.controls, .notification, .new-note {
     opacity: 0;
     transition: opacity 0.2s;
 }
 
-.note:hover .controls, .notification.active {
+.note:hover .controls, .active {
+    display: initial;
     opacity: 1;
 }
