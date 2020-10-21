@@ -5,7 +5,7 @@ class Note {
 //        preg_match("/^(.*\/)?(((\d+)-\d+)-?((?:.+)?\.(.+)))$/", $this->fpath, $match);
         // use the below regex for now, but the above one once all the file names follow the established pattern
         preg_match("/^(.*\/)?(((\d+)(?:-\d+)?)-?((?:.+)?\.(.+)))$/", $this->fpath, $match);
-        list($_,
+        list(,
              $this->fdir,
              $this->fname,
              $this->id,
