@@ -9,8 +9,12 @@ window.addEventListener("keydown", function(event) {
   }
 });
 
+function getNoteForm() {
+  return document.querySelector(".new-note");
+}
+
 function showNoteForm() {
-    let formContainer = document.querySelector(".new-note");
+    let formContainer = getNoteForm();
     let form = formContainer.querySelector("form");
     let contentBox = formContainer.querySelector("textarea");
     formContainer.classList.add("active");
@@ -27,12 +31,12 @@ function showNoteForm() {
 }
 
 function hideNoteForm() {
-  let formContainer = document.querySelector(".new-note");
+  let formContainer = getNoteForm();
   formContainer.classList.remove("active");
 }
 
 function submitNoteForm() {
-  let form = document.querySelector(".new-note form");
+  let form = getNoteForm().querySelector("form");
   // change this so it submits the form without leaving the page
   form.submit();
 }
