@@ -1,7 +1,7 @@
 "use strict";
 
 window.addEventListener("keydown", function(event) {
-  if (event.key == "n") {
+  if (event.key == "n" && !getNoteForm().classList.contains("active")) {
     event.preventDefault();
     showNoteForm();
   } else if (event.key == "Escape") {
