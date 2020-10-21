@@ -109,7 +109,9 @@ class TextNote extends Note {
                 /*
                 }
                 */
-                $link = "<a href=\"$url\">$title</a>";
+                $link = "<a href=\"$url\"
+                            target=\"_blank\"
+                            rel=\"noopener noreferrer\">$title</a>";
                 return $link;
             },
             $this->content);
