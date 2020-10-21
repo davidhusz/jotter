@@ -2,6 +2,7 @@
 
 window.addEventListener("keydown", function(event) {
   if (event.key == "n") {
+    event.preventDefault();
     showNoteForm();
   } else if (event.key == "Escape") {
     hideNoteForm();
