@@ -10,18 +10,19 @@ window.addEventListener("keydown", function(event) {
 });
 
 function showNoteForm() {
-    let noteForm = document.querySelector(".new-note");
-    noteForm.classList.add("active");
-    let contentBox = noteForm.querySelector("textarea");
+    let formContainer = document.querySelector(".new-note");
+    formContainer.classList.add("active");
+    let contentBox = formContainer.querySelector("textarea");
     contentBox.focus();
     contentBox.addEventListener("keydown", function(event) {
       if (event.ctrlKey && event.key == "Enter") {
-        noteForm.querySelector("form").submit();
+        formContainer.querySelector("form").submit();
       }
     });
 }
 
 function hideNoteForm() {
-  let noteForm = document.querySelector(".new-note");
-  noteForm.classList.remove("active");
+  let formContainer = document.querySelector(".new-note");
+  formContainer.classList.remove("active");
 }
+
