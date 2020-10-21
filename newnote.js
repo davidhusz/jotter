@@ -33,7 +33,9 @@ function showNoteForm() {
   
   window.addEventListener("click", function(event) {
     let modal = getNoteForm().querySelector(".modal");
-    if (!modal.contains(event.target)) {
+    if (!modal.contains(event.target)
+        // HACK: ideally the event listener should be removed once the modal is closed
+        && event.target !== document.querySelector(".instructions span.clickable")) {
       hideNoteForm();
     }
   });
