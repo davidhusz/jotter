@@ -3,7 +3,7 @@
         // Return a file name which is unique in the contents directory
         // (regardless of extension or original file name)
         $dir = "../contents";
-        $date = date("U");
+        $date = date("YmdHis");
         
         $id_collisions = 1;
         while ($id_collisions > 0) {

@@ -9,10 +9,10 @@ class Note {
              $this->fdir,
              $this->fname,
              $this->id,
-             $this->date_unix,
+             $this->date_digitsonly,
              $this->original_filename,
              $this->extension) = $match;
-        $this->date_human = date("D d M Y H:i T", $this->date_unix);
+        $this->date_human = DateTime::createFromFormat("YmdHis", $this->date_digitsonly)->format("D d M Y H:i T");
         $this->date_iso = date("c", $this->date_unix);
     }
     
