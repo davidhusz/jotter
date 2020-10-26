@@ -47,7 +47,27 @@ function hideNoteForm() {
 }
 
 function submitNoteForm() {
-  let form = getNoteForm().querySelector("form");
-  // change this so it submits the form without leaving the page
-  form.submit();
+  let contentBox = getNoteForm().querySelector("textarea");
+  let noteContent = contentBox.value;
+  fetch("api/post.php", {
+    method: "POST",
+    body: "note=" + encodeURIComponent(noteContent),
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded"
+    }
+  }).then(function(response) {
+            if (response.ok) {
+              return response.text();
+            } else {
+              throw Error(response.statusText);
+            }
+          })
+    .then(function(message) {
+            contentBox.value = "";
+            console.log("Note saved.");
+            window.location.reload();
+          })
+    .catch(function(error) {
+             console.error("Error saving note. Check request history.");
+           })
 }
