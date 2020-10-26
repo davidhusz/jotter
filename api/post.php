@@ -9,7 +9,8 @@
         while ($id_collisions > 0) {
             // Random five digit integer
             $id = "$date-" . str_pad(rand(0, 99999), 5, 0, STR_PAD_LEFT);
-            $id_collisions = count(glob("$dir/$id.*"));
+            $id_collisions = count(glob("$dir/$id.*"))
+                           + count(glob("$dir/.trash/$id.*"));
             // Maybe use `uniqid()` instead?
         }
         
