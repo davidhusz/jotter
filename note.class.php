@@ -2,9 +2,7 @@
 class Note {
     function __construct($fpath) {
         $this->fpath = $fpath;
-//        preg_match("/^(.*\/)?(((\d+)-\d+)-?((?:.+)?\.(.+)))$/", $this->fpath, $match);
-        // use the below regex for now, but the above one once all the file names follow the established pattern
-        preg_match("/^(.*\/)?(((\d+)(?:-\d+)?)-?((?:.+)?\.(.+)))$/", $this->fpath, $match);
+        preg_match("/^(.*\/)?(((\d{14})-\d{5})-?((?:.+)?\.(.+)))$/", $this->fpath, $match);
         list(,
              $this->fdir,
              $this->fname,
