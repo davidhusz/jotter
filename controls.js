@@ -1,6 +1,6 @@
 "use strict";
 
-window.onload = function() {
+window.addEventListener("DOMContentLoaded", function() {
   let controlButtons = document.querySelectorAll(".controls > *");
   
   for (let button of controlButtons) {
@@ -29,7 +29,7 @@ window.onload = function() {
       }
     }
   }
-}
+});
 
 var notificationTimeout;
 
