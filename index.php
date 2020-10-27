@@ -38,7 +38,7 @@
                     You have disabled JavaScript. Interactive components, such as the copy or the delete function, will not work correctly.
                 </noscript>
                 <div class="instructions">
-                    click <span class="clickable" onclick="showNoteForm()">here</span> or press <kbd>N</kbd> to create a new note
+                    click <span class="clickable note-form-button">here</span> or press <kbd>N</kbd> to create a new note
                 </div>
             </header>
             <main>
@@ -61,7 +61,7 @@
                                         <label for="form-contentbox">
                                             Please enter a new note:
                                         </label>
-                                        <span class="clickable close-button" onclick="hideNoteForm()">X</span>
+                                        <span class="clickable close-button">X</span>
                                     </div>
                                     <div class="contentbox">
                                         <textarea id="form-contentbox" name="note"></textarea>

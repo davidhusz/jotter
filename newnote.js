@@ -1,7 +1,29 @@
 "use strict";
 
+var formContainer, form, contentBox;
+
+window.addEventListener("DOMContentLoaded", function() {
+  formContainer = document.querySelector(".new-note");
+  form = formContainer.querySelector("form");
+  contentBox = formContainer.querySelector("textarea");
+  
+  document.querySelector(".note-form-button").onclick = showNoteForm;
+  document.querySelector(".close-button").onclick = hideNoteForm;
+  
+  form.addEventListener("submit", function(event) {
+    event.preventDefault();
+    submitNoteForm();
+  });
+  
+  contentBox.addEventListener("keydown", function(event) {
+    if (event.ctrlKey && event.key == "Enter") {
+      submitNoteForm();
+    }
+  });
+});
+
 window.addEventListener("keydown", function(event) {
-  if (event.key == "n" && !getNoteForm().classList.contains("active")) {
+  if (event.key == "n" && !noteFormIsShown()) {
     event.preventDefault();
     showNoteForm();
   } else if (event.key == "Escape") {
@@ -9,49 +31,35 @@ window.addEventListener("keydown", function(event) {
   }
 });
 
-function getNoteForm() {
-  return document.querySelector(".new-note");
-}
-
 function showNoteForm() {
-  let formContainer = getNoteForm();
-  let form = formContainer.querySelector("form");
-  let contentBox = formContainer.querySelector("textarea");
   formContainer.classList.add("active");
-  
   contentBox.focus();
-  contentBox.addEventListener("keydown", function(event) {
-    if (event.ctrlKey && event.key == "Enter") {
-      submitNoteForm();
-    }
-  });
-  
-  form.addEventListener("submit", function(event) {
-      event.preventDefault();
-      submitNoteForm();
-  });
-  
-  window.addEventListener("click", function(event) {
-    let modal = getNoteForm().querySelector(".modal");
-    if (!modal.contains(event.target)
-        // HACK: ideally the event listener should be removed once the modal is closed
-        && event.target !== document.querySelector(".instructions span.clickable")) {
-      hideNoteForm();
-    }
-  });
+  window.addEventListener("click", backgroundClickHandler);
 }
 
 function hideNoteForm() {
-  let formContainer = getNoteForm();
   formContainer.classList.remove("active");
+  window.removeEventListener("click", backgroundClickHandler);
+}
+
+function noteFormIsShown() {
+  return formContainer.classList.contains("active");
+}
+
+function backgroundClickHandler(event) {
+  let modal = formContainer.querySelector(".modal");
+  if (!modal.contains(event.target)
+      // HACK: the problem is that upon clicking the note form button the modal
+      // is opened and also immediately closed again
+      && event.target !== document.querySelector(".note-form-button")) {
+    hideNoteForm();
+  }
 }
 
 function submitNoteForm() {
-  let contentBox = getNoteForm().querySelector("textarea");
-  let noteContent = contentBox.value;
   fetch("api/post.php", {
     method: "POST",
-    body: "note=" + encodeURIComponent(noteContent),
+    body: "note=" + encodeURIComponent(contentBox.value),
     headers: {
       "Content-Type": "application/x-www-form-urlencoded"
     }
