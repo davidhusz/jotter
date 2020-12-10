@@ -13,65 +13,65 @@
 set -euo pipefail
 
 if [ -f "$HOME/.config/jotter.rc" ]; then
-	source "$HOME/.config/jotter.rc"
+    source "$HOME/.config/jotter.rc"
 else
-	echo "jotter.rc does not exist"
-	exit 1
+    echo "jotter.rc does not exist"
+    exit 1
 fi
 
 request () {
-	curl -sS \
-		 --fail \
-		 --user "${username:-}:${password:-}" \
-		 "$@"
+    curl -sS \
+         --fail \
+         --user "${username:-}:${password:-}" \
+         "$@"
 }
 
 new () {
-	if [ -z "${1:-}" ]; then
-		# request --data-urlencode "note=$(</dev/stdin)"
-		request "$server/api/post.php" --form "contents[]=@-"
-	elif [ "${1:0:1}" = "-" ]; then
-		case "$1" in
-			-f|--files)
-				shift
-				request "$server/api/post.php" "${@/#/-Fcontents[]=@}"
-				;;
-			*)
-				echo "unknown option '$1'"
-				exit 1
-		esac
-	else
-		request "$server/api/post.php" --data-urlencode "note=$*"
-	fi
+    if [ -z "${1:-}" ]; then
+        # request --data-urlencode "note=$(</dev/stdin)"
+        request "$server/api/post.php" --form "contents[]=@-"
+    elif [ "${1:0:1}" = "-" ]; then
+        case "$1" in
+            -f|--files)
+                shift
+                request "$server/api/post.php" "${@/#/-Fcontents[]=@}"
+                ;;
+            *)
+                echo "unknown option '$1'"
+                exit 1
+        esac
+    else
+        request "$server/api/post.php" --data-urlencode "note=$*"
+    fi
 }
 
 latest () {
-	request "$server/?count=1" -H "Accept: application/json" |
-		jq -r ".content"
+    request "$server/?count=1" -H "Accept: application/json" |
+        jq -r ".content"
 }
 
 usage () {
-	echo "display usage here"
+    echo "display usage here"
 }
 
 main () {
-	case "${1:-}" in
-		new)
-			shift
-			new "$@"
-			;;
-		latest)
-			shift
-			latest
-			;;
-		-h|--help|"")
-			usage
-			;;
-		*)
-			usage
-			exit 1
-			;;
-	esac
+    case "${1:-}" in
+        new)
+            shift
+            new "$@"
+            ;;
+        latest)
+            shift
+            latest
+            ;;
+        -h|--help|"")
+            usage
+            ;;
+        *)
+            usage
+            exit 1
+            ;;
+    esac
 }
 
 main "$@"
