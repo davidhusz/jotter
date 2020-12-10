@@ -1,5 +1,5 @@
 <?php
-    require "note.class.php";
+    require "includes/note.class.php";
     $fnames = scandir("contents", SCANDIR_SORT_DESCENDING);
     if (isset($_GET["count"])) {
         $fnames = array_slice($fnames, 0, $_GET["count"]);
@@ -24,10 +24,10 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <link rel="icon" type="image/png" href="favicon.png">
-        <link rel="stylesheet" href="style.css">
-        <script type="text/javascript" src="controls.js"></script>
-        <script type="text/javascript" src="newnote.js"></script>
+        <link rel="icon" type="image/png" href="includes/favicon.png">
+        <link rel="stylesheet" href="includes/style.css">
+        <script type="text/javascript" src="includes/controls.js"></script>
+        <script type="text/javascript" src="includes/newnote.js"></script>
         <title>Notes</title>
     </head>
     <body>
