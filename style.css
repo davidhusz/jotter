@@ -67,6 +67,11 @@ kbd {
     position: relative;
 }
 
+.note .content {
+    max-height: 10em;
+    overflow: auto;
+}
+
 .note:not(:last-child) {
     border-bottom: 0;
 }
