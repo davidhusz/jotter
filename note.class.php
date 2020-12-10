@@ -89,7 +89,7 @@ class TextNote extends Note {
         $this->content = preg_replace_callback(
             '/(https?:\/\/)' .                           // protocol
             '([A-Za-z0-9\.-]+)' .                        // domain
-            '(\/[A-Za-z0-9\.\(\)~%:?(&amp;)=_-]+)*\/?/', // path
+            '(\/[A-Za-z0-9\.\(\)~%:#,?(&amp;)=_-]+)*\/?/', // path
             function($match) {
                 // link to url and replace link text with
                 // title of the linked website
