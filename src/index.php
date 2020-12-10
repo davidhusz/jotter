@@ -1,5 +1,5 @@
 <?php
-    require "includes/note.class.php";
+    require "includes/notes.php";
     $fnames = scandir("contents", SCANDIR_SORT_DESCENDING);
     if (isset($_GET["count"])) {
         $fnames = array_slice($fnames, 0, $_GET["count"]);
