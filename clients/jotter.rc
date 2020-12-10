@@ -1,0 +1,4 @@
+# This is an example config file for the jotter shell client
+server=mywebsite.com/jotter
+username=jebediah
+password=hunter2
