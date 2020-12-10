@@ -11,7 +11,7 @@ class Note {
              $this->original_filename,
              $this->extension) = $match;
         $this->date_human = DateTime::createFromFormat("YmdHis", $this->date_digitsonly)->format("D d M Y H:i T");
-        $this->date_iso = date("c", $this->date_unix);
+        $this->date_iso = DateTime::createFromFormat("YmdHis", $this->date_digitsonly)->format("c");
     }
     
     static function of_unknown_type($fpath) {
