@@ -1,3 +1,4 @@
+# Ignore all files in the contents directory except for hidden files
 src/contents/*
 src/contents/.*/*
 !src/contents/.*
