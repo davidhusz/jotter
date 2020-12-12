@@ -70,7 +70,7 @@ class Note {
     }
     
     function full_html() {
-        return "<div id=\"$this->id\" class=\"note $this->type\" data-filepath=\"$this->fpath\">
+        return "<div id=\"N$this->id\" class=\"note $this->type\" data-filepath=\"$this->fpath\">
                     <div class=\"date\"><time datetime=\"$this->date_iso\">$this->date_human</time></div>
                     <div class=\"content\">" . $this->content_as_html() . "</div>
                     <div class=\"controls\">
