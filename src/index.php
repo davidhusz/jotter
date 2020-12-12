@@ -1,5 +1,5 @@
 <?php
-    require "includes/notes.php";
+    require "includes/noteclasses.php";
     $fnames = scandir("contents", SCANDIR_SORT_DESCENDING);
     if (isset($_GET["count"])) {
         $fnames = array_slice($fnames, 0, $_GET["count"]);
@@ -26,8 +26,8 @@
         <meta charset="utf-8">
         <link rel="icon" type="image/png" href="includes/favicon.png">
         <link rel="stylesheet" href="includes/style.css">
-        <script type="text/javascript" src="includes/controls.js"></script>
-        <script type="text/javascript" src="includes/newnote.js"></script>
+        <script type="text/javascript" src="includes/notecontrols.js"></script>
+        <script type="text/javascript" src="includes/newnoteform.js"></script>
         <title>Notes</title>
     </head>
     <body>
