@@ -6,25 +6,19 @@ window.addEventListener("DOMContentLoaded", function() {
   for (let button of controlButtons) {
     button.onclick = function() {
       let buttonType = button.classList[0];
-      let note = {
-        container: button.parentNode.parentNode,
-//        filepath: button.parentNode.parentNode.querySelector(".download").getAttribute("href"),
-        filepath: button.parentNode.parentNode.dataset.filepath,
-        filename: button.parentNode.parentNode.dataset.filepath.split("/").pop(),
-        type: button.parentNode.parentNode.classList[1],
-        notification: {
-          success: button.dataset.notificationOnSuccess,
-          failure: button.dataset.notificationOnFailure,
-          restore: button.dataset.notificationOnRestore
-        }
+      let noteElement = button.parentNode.parentNode;
+      let notifications = {
+        success: button.dataset.notificationOnSuccess,
+        failure: button.dataset.notificationOnFailure,
+        restore: button.dataset.notificationOnRestore
       }
       
       switch (buttonType) {
         case "copy":
-          copyNoteToClipboard(note);
+          copyNoteToClipboard(noteElement, notifications);
           break;
         case "delete":
-          removeNote(note);
+          removeNote(noteElement, notifications);
           break;
       }
     }
@@ -33,7 +27,18 @@ window.addEventListener("DOMContentLoaded", function() {
 
 var notificationTimeout;
 
-function copyNoteToClipboard(note) {
+function getNoteDetails(noteElement) {
+  let noteDetails = {
+    container: noteElement,
+    filepath: noteElement.dataset.filepath,
+    filename: noteElement.dataset.filepath.split("/").pop(),
+    type: noteElement.classList[1]
+  }
+  return noteDetails;
+}
+
+function copyNoteToClipboard(noteElement, notifications) {
+  let note = getNoteDetails(noteElement);
   fetch(note.filepath)
     .then(response => response.text())
     .then(function(noteContent) {
@@ -58,14 +63,15 @@ function copyNoteToClipboard(note) {
 //                            () => console.error("Copying to clipboard failed"));
           }
         }
-        showNotification(note.notification.success);
+        showNotification(notifications.success);
       } else {
         prompt("Clipboard cannot be accessed, please copy manually", noteContent);
       }
     });
 }
 
-function removeNote(note) {
+function removeNote(noteElement, notifications) {
+  let note = getNoteDetails(noteElement);
   fetch("api/delete.php", {
     method: "POST",
     body: "file=" + note.filename,
@@ -81,17 +87,18 @@ function removeNote(note) {
           })
     .then(function(message) {
             note.container.classList.add("removed");
-            showNotification(note.notification.success, 7);
+            showNotification(notifications.success, 7);
             document.querySelector(".notification span").onclick = function() {
-              restoreNote(note);
+              restoreNote(noteElement, notifications);
             }
           })
     .catch(function(error) {
-             showNotification(note.notification.failure);
+             showNotification(notifications.failure);
            });
 }
 
-function restoreNote(note) {
+function restoreNote(noteElement, notifications) {
+  let note = getNoteDetails(noteElement);
   fetch("api/restore.php", {
     method: "POST",
     body: "file=" + note.filename,
@@ -107,10 +114,10 @@ function restoreNote(note) {
           })
     .then(function(message) {
             note.container.classList.remove("removed");
-            showNotification(note.notification.restore);
+            showNotification(notifications.restore);
           })
     .catch(function(error) {
-             showNotification(note.notification.failure);
+             showNotification(notifications.failure);
            });
 }
 
