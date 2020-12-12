@@ -1,19 +1,19 @@
 "use strict";
 
 window.addEventListener("DOMContentLoaded", function() {
-  let controlButtons = document.querySelectorAll(".controls > *");
+  let controls = document.querySelectorAll(".controls > *");
   
-  for (let button of controlButtons) {
-    button.onclick = function() {
-      let buttonType = button.classList[0];
-      let noteElement = button.parentNode.parentNode;
+  for (let control of controls) {
+    control.onclick = function() {
+      let controlType = control.classList[0];
+      let noteElement = control.parentNode.parentNode;
       let notifications = {
-        success: button.dataset.notificationOnSuccess,
-        failure: button.dataset.notificationOnFailure,
-        restore: button.dataset.notificationOnRestore
+        success: control.dataset.notificationOnSuccess,
+        failure: control.dataset.notificationOnFailure,
+        restore: control.dataset.notificationOnRestore
       }
       
-      switch (buttonType) {
+      switch (controlType) {
         case "copy":
           copyNoteToClipboard(noteElement, notifications);
           break;
