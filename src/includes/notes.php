@@ -2,6 +2,7 @@
 class Note {
     function __construct($fpath) {
         $this->fpath = $fpath;
+        $this->fsize = filesize($fpath);
         preg_match("/^(.*\/)?(((\d{14})-\d{5})-?((?:.+)?\.(.+)))$/", $this->fpath, $match);
         list(,
              $this->fdir,
@@ -55,6 +56,17 @@ class Note {
             $note = new FileNote($fpath);
         }
         return $note;
+    }
+    
+    function humanreadable_fsize() {
+        if ($this->fsize == 0) {
+            return "0 B";
+        }
+        $units = ["KiB", "MiB", "GiB", "TiB", "PiB"];
+        $magnitude = floor(log($this->fsize, 1024));
+        return round($this->fsize / 1024 ** $magnitude)
+               . " "
+               . $units[$magnitude];
     }
     
     function full_html() {
@@ -170,7 +182,9 @@ class FileNote extends Note {
     }
     
     function content_as_html() {
-        return "File: <a href=\"$this->fpath\">$this->fname</a>";
+        return "File: <a href=\"$this->fpath\">$this->fname</a> (size: "
+               . $this->humanreadable_fsize()
+               . ")";
     }
 }
 ?>
