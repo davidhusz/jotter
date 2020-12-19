@@ -81,6 +81,23 @@ kbd {
     max-height: 15em;
 }
 
+.note.selected {
+    background: #f2f2f2;
+    box-shadow: -0.5em 0 #f2f2f2, 0.5em 0 #f2f2f2, -0.5em 0 10px 0 #dbdbdb, 0.5em 0 10px 0 #dbdbdb;
+    border-color: rgba(0, 0, 0, 0);
+    transition-property: box-shadow;
+    transition-duration: .2s;
+}
+
+.note.selected .controls {
+    background: inherit;
+    box-shadow: -0.2em -0.2em 0.2em #f2f2f2;
+}
+
+.note.selected + .note {
+    border-top-color: rgba(0, 0, 0, 0);
+}
+
 .note.removed {
     display: none;
 }
