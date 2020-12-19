@@ -107,19 +107,15 @@ class TextNote extends Note {
                 // link to url and replace link text with
                 // title of the linked website
                 $url = $match[0];
-                /*
-                if (preg_match('/<title>(.+)<\/title>/i',
-                              file_get_contents($url),
-                              $title)) {
-                    $title = $title[1];
-                } else {
-                    // if title could not be found,
-                    // use url for title
-                */
+                // if (preg_match('/<title>(.+)<\/title>/i',
+                //               file_get_contents($url),
+                //               $title)) {
+                //     $title = $title[1];
+                // } else {
+                //     // if title could not be found,
+                //     // use url for title
                     $title = $url;
-                /*
-                }
-                */
+                // }
                 $link = "<a href=\"$url\"
                             target=\"_blank\"
                             rel=\"noopener noreferrer\">$title</a>";
