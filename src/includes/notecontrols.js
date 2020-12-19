@@ -57,6 +57,24 @@ window.addEventListener("keydown", function(event) {
     case "Escape":
       unselectAllNotes();
       break;
+    
+    case "c":
+      if (isAnyNoteSelected()) {
+        copyNoteToClipboard(getSelectedNote());
+      }
+      break;
+    
+    case "d":
+      if (isAnyNoteSelected()) {
+        getSelectedNote().container.querySelector(".download").click();
+      }
+      break;
+    
+    case "t": // "t" for trash
+      if (isAnyNoteSelected()) {
+        removeNote(getSelectedNote());
+      }
+      break;
   }
 });
 
