@@ -129,6 +129,10 @@ kbd {
     color: #6f8fae;
 }
 
+.hotkey {
+    font-weight: bold;
+}
+
 
 /* New note form */
 

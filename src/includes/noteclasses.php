@@ -75,14 +75,9 @@ class Note {
                     <div class=\"content\">" . $this->content_as_html() . "</div>
                     <div class=\"controls\">
                         <!-- <span class=\"edit\">edit/info</span> -->
-                        <span class=\"copy\"
-                              data-notification-on-success=\"$this->copy_target copied.\"
-                              data-notification-on-failure=\"Error. Could not copy\">copy</span>
-                        <a class=\"download\" href=\"$this->fpath\" download>download</a>
-                        <span class=\"delete\"
-                              data-notification-on-success=\"Note deleted. <span>Undo</span>\"
-                              data-notification-on-failure=\"Error. Check request history\"
-                              data-notification-on-restore=\"Note restored.\">delete</span>
+                        <span class=\"copy\"><span class=\"hotkey\">c</span>opy</span>
+                        <a class=\"download\" href=\"$this->fpath\" download><span class=\"hotkey\">d</span>ownload</a>
+                        <span class=\"delete\"><span class=\"hotkey\">t</span>rash</span>
                     </div>
                 </div>";
     }
