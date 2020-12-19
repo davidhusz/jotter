@@ -24,11 +24,63 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+window.addEventListener("keydown", function(event) {
+  if (event.key == "ArrowDown") {
+    event.preventDefault();
+    if (!isAnyNoteSelected()) {
+      selectNote(noteList[0]);
+    } else {
+      let currentlySelected = noteList.indexOf(getSelectedNote());
+      if (currentlySelected < noteList.length-1) {
+        selectNote(noteList[currentlySelected+1]);
+      } else {
+        unselectAllNotes();
+      }
+    }
+  } else if (event.key == "ArrowUp" && isAnyNoteSelected()) {
+    event.preventDefault();
+    let currentlySelected = noteList.indexOf(getSelectedNote());
+    if (currentlySelected > 0) {
+      selectNote(noteList[currentlySelected-1]);
+    } else {
+      unselectAllNotes();
+    }
+  }
+});
+
 function Note(container) {
   this.container = container;
   this.type = container.classList[1];
   this.filepath = container.dataset.filepath;
   this.filename = this.filepath.split("/").pop();
+}
+
+function selectNote(note) {
+  unselectAllNotes();
+  note.container.classList.add("selected");
+  // note.container.scrollIntoView();
+}
+
+function unselectNote(note) {
+  note.container.classList.remove("selected");
+}
+
+function isNoteSelected(note) {
+  return note.container.classList.contains("selected");
+}
+
+function isAnyNoteSelected() {
+  return noteList.some(note => isNoteSelected(note));
+}
+
+function getSelectedNote() {
+  return noteList.filter(note => isNoteSelected(note))[0];
+}
+
+function unselectAllNotes() {
+  if (isAnyNoteSelected()) {
+    unselectNote(getSelectedNote());
+  }
 }
 
 function performBackendOperation(note, operation, onSuccess) {
