@@ -53,6 +53,10 @@ window.addEventListener("keydown", function(event) {
         }
       }
       break;
+    
+    case "Escape":
+      unselectAllNotes();
+      break;
   }
 });
 
