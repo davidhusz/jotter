@@ -1,124 +1,127 @@
 "use strict";
 
-window.addEventListener("DOMContentLoaded", function() {
-  let controls = document.querySelectorAll(".controls > *");
+// Global variables
+var noteList, notificationTimeout;
+
+window.addEventListener("DOMContentLoaded", () => {
+  noteList = [];
+  for (let noteElement of document.querySelectorAll(".note")) {
+    noteList.push(new Note(noteElement));
+  }
   
-  for (let control of controls) {
-    control.onclick = function() {
+  for (let note of noteList) {
+    let controls = note.container.querySelectorAll(".controls > *");
+    for (let control of controls) {
       let controlType = control.classList[0];
-      let noteElement = control.parentNode.parentNode;
-      let notifications = {
-        success: control.dataset.notificationOnSuccess,
-        failure: control.dataset.notificationOnFailure,
-        restore: control.dataset.notificationOnRestore
-      }
-      
-      switch (controlType) {
-        case "copy":
-          copyNoteToClipboard(noteElement, notifications);
-          break;
-        case "delete":
-          removeNote(noteElement, notifications);
-          break;
-      }
+      control.addEventListener("click", () => {
+        if (controlType == "copy") {
+          copyNoteToClipboard(note);
+        } else if (controlType == "delete") {
+          removeNote(note);
+        }
+      });
     }
   }
 });
 
-var notificationTimeout;
-
-function getNoteDetails(noteElement) {
-  let noteDetails = {
-    container: noteElement,
-    filepath: noteElement.dataset.filepath,
-    filename: noteElement.dataset.filepath.split("/").pop(),
-    type: noteElement.classList[1]
-  }
-  return noteDetails;
+function Note(container) {
+  this.container = container;
+  this.type = container.classList[1];
+  this.filepath = container.dataset.filepath;
+  this.filename = this.filepath.split("/").pop();
 }
 
-function copyNoteToClipboard(noteElement, notifications) {
-  let note = getNoteDetails(noteElement);
-  fetch(note.filepath)
-    .then(response => response.text())
-    .then(function(noteContent) {
-      noteContent = noteContent.trimEnd();
+function performBackendOperation(note, operation, onSuccess) {
+  let request = new Request("api/" + operation + ".php", {
+    method: "POST",
+    body: "file=" + note.filename,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded"
+    }
+  });
+  console.log("Sending request: ", request);
+  fetch(request).then(
+    (response) => {
+      if (!response.ok) {
+        throw Error("Server returned: " + response.status + " " + response.statusText);
+      }
+    },
+    (error) => {
+      throw Error("Could not send request. " + error);
+    }
+  ).then(
+    onSuccess,
+    logError
+  );
+}
+
+function logError(error) {
+  console.error(error);
+  showNotification("Error. Check console");
+}
+
+function copyNoteToClipboard(note) {
+  fetch(note.filepath).then(
+    (response) => {
+      if (response.ok) {
+        return response.text();
+      } else {
+        throw Error("Server returned: " + response.status + " " + response.statusText);
+      }
+    }
+  ).then(
+    (contents) => {
+      contents = contents.trimEnd();
+      // TODO: account for different kinds of MIME types
       if (navigator.clipboard !== undefined) {
         // this only works with https apparently
+        // also, it has to be triggered via a user event
         try {
-          // TODO: account for different kinds of mime types
-          let noteContentForClipboard = [new ClipboardItem({"text/plain": noteContent})];
-          navigator.clipboard.write(noteContentForClipboard);
-//                    .then(() => console.log("Successfully copied to clipboard"),
-//                          () => console.error("Copying to clipboard failed"));
+          let contentsForClipboard = [new ClipboardItem({"text/plain": contents})];
+          navigator.clipboard.write(contentsForClipboard).then(
+            () => { showNotification("Note copied.") },
+            logError
+          )
         } catch (error) {
           if (note.type == "text") {
-            navigator.clipboard.writeText(noteContent);
-//                      .then(() => console.log("Successfully copied to clipboard"),
-//                            () => console.error("Copying to clipboard failed"));
+            navigator.clipboard.writeText(contents).then(
+              () => { showNotification("Note copied.") },
+              logError
+            );
           } else {
-            // make sure GET parameters are excluded
-            navigator.clipboard.writeText(location.href.replace(location.search, "") + note.filepath);
-//                      .then(() => console.log("Successfully copied to clipboard"),
-//                            () => console.error("Copying to clipboard failed"));
+            // copy URL with GET parameters excluded
+            navigator.clipboard.writeText(
+              location.href.replace(location.search, "") + note.filepath
+            ).then(
+              () => { showNotification("URL copied.") },
+              logError
+            );
           }
         }
-        showNotification(notifications.success);
       } else {
-        prompt("Clipboard cannot be accessed, please copy manually", noteContent);
+        // fallback using prompt pop-up
+        prompt("Clipboard cannot be accessed, please copy manually", contents);
       }
+    },
+    logError
+  )
+}
+
+function removeNote(note) {
+  performBackendOperation(note, "delete", (response) => {
+    showNotification("Note deleted. <span>Undo</span>", 7);
+    note.container.classList.add("removed");
+    document.querySelector(".notification span").addEventListener("click", () => {
+      restoreNote(note);
     });
+  });
 }
 
-function removeNote(noteElement, notifications) {
-  let note = getNoteDetails(noteElement);
-  fetch("api/delete.php", {
-    method: "POST",
-    body: "file=" + note.filename,
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded"
-    }
-  }).then(function(response) {
-            if (response.ok) {
-              return response.text();
-            } else {
-              throw Error(response.statusText);
-            }
-          })
-    .then(function(message) {
-            note.container.classList.add("removed");
-            showNotification(notifications.success, 7);
-            document.querySelector(".notification span").onclick = function() {
-              restoreNote(noteElement, notifications);
-            }
-          })
-    .catch(function(error) {
-             showNotification(notifications.failure);
-           });
-}
-
-function restoreNote(noteElement, notifications) {
-  let note = getNoteDetails(noteElement);
-  fetch("api/restore.php", {
-    method: "POST",
-    body: "file=" + note.filename,
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded"
-    }
-  }).then(function(response) {
-            if (response.ok) {
-              return response.text();
-            } else {
-              throw Error(response.statusText);
-            }
-          })
-    .then(function(message) {
-            note.container.classList.remove("removed");
-            showNotification(notifications.restore);
-          })
-    .catch(function(error) {
-             showNotification(notifications.failure);
-           });
+function restoreNote(note) {
+  performBackendOperation(note, "restore", (response) => {
+    showNotification("Note restored.");
+    note.container.classList.remove("removed");
+  });
 }
 
 function showNotification(message, seconds = 3) {
