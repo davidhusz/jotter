@@ -1,6 +1,6 @@
 <?php
     require "includes/noteclasses.php";
-    $fnames = scandir("contents", SCANDIR_SORT_DESCENDING);
+    $fnames = scandir("contents");
     $fnames = array_filter($fnames, function($fname) {
         // ignore hidden directories and files
         return ($fname[0] != ".");
@@ -8,6 +8,10 @@
     $fpaths = array_map(function($fname) {
         return "contents/$fname";
     }, $fnames);
+    usort($fpaths, function($file1, $file2) {
+        // sort by modification time (newest to oldest);
+        return filemtime("$file2") - filemtime("$file1");
+    });
     if (isset($_GET["count"])) {
         $fpaths = array_slice($fpaths, 0, $_GET["count"]);
     }
