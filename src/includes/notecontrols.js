@@ -27,6 +27,7 @@ window.addEventListener("DOMContentLoaded", () => {
 window.addEventListener("keydown", function(event) {
   switch (event.key) {
     case "ArrowDown":
+    case "f":
       event.preventDefault();
       if (!isAnyNoteSelected()) {
         selectNote(noteList[0]);
@@ -41,6 +42,7 @@ window.addEventListener("keydown", function(event) {
       break;
     
     case "ArrowUp":
+    case "w":
       if (isAnyNoteSelected()) {
         event.preventDefault();
         let currentlySelected = noteList.indexOf(getSelectedNote());
