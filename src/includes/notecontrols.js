@@ -25,26 +25,32 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 window.addEventListener("keydown", function(event) {
-  if (event.key == "ArrowDown") {
-    event.preventDefault();
-    if (!isAnyNoteSelected()) {
-      selectNote(noteList[0]);
-    } else {
-      let currentlySelected = noteList.indexOf(getSelectedNote());
-      if (currentlySelected < noteList.length-1) {
-        selectNote(noteList[currentlySelected+1]);
+  switch (event.key) {
+    case "ArrowDown":
+      event.preventDefault();
+      if (!isAnyNoteSelected()) {
+        selectNote(noteList[0]);
       } else {
-        unselectAllNotes();
+        let currentlySelected = noteList.indexOf(getSelectedNote());
+        if (currentlySelected < noteList.length-1) {
+          selectNote(noteList[currentlySelected+1]);
+        } else {
+          unselectAllNotes();
+        }
       }
-    }
-  } else if (event.key == "ArrowUp" && isAnyNoteSelected()) {
-    event.preventDefault();
-    let currentlySelected = noteList.indexOf(getSelectedNote());
-    if (currentlySelected > 0) {
-      selectNote(noteList[currentlySelected-1]);
-    } else {
-      unselectAllNotes();
-    }
+      break;
+    
+    case "ArrowUp":
+      if (isAnyNoteSelected()) {
+        event.preventDefault();
+        let currentlySelected = noteList.indexOf(getSelectedNote());
+        if (currentlySelected > 0) {
+          selectNote(noteList[currentlySelected-1]);
+        } else {
+          unselectAllNotes();
+        }
+      }
+      break;
   }
 });
 
