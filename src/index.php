@@ -1,12 +1,13 @@
 <?php
+    define("CONTENT_DIR", "contents");
     require "includes/noteclasses.php";
-    $fnames = scandir("contents");
+    $fnames = scandir(CONTENT_DIR);
     $fnames = array_filter($fnames, function($fname) {
         // ignore hidden directories and files
         return ($fname[0] != ".");
     });
     $fpaths = array_map(function($fname) {
-        return "contents/$fname";
+        return CONTENT_DIR . "/$fname";
     }, $fnames);
     usort($fpaths, function($file1, $file2) {
         // sort by modification time (newest to oldest);
