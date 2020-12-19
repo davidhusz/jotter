@@ -13,6 +13,9 @@ class Note {
              $this->extension) = $match;
         $this->date_human = DateTime::createFromFormat("YmdHis", $this->date_digitsonly)->format("D d M Y H:i T");
         $this->date_iso = DateTime::createFromFormat("YmdHis", $this->date_digitsonly)->format("c");
+        $this->last_modified = filemtime($fpath);
+        $this->last_modified_human = date("D d M Y H:i T", $this->last_modified);
+        $this->last_modified_iso = date("c", $this->last_modified);
     }
     
     static function of_unknown_type($fpath) {
@@ -71,7 +74,12 @@ class Note {
     
     function full_html() {
         return "<div id=\"N$this->id\" class=\"note $this->type\" data-filepath=\"$this->fpath\">
-                    <div class=\"date\"><time datetime=\"$this->date_iso\">$this->date_human</time></div>
+                    <div class=\"date\">
+                        <time datetime=\"$this->last_modified_iso\">$this->last_modified_human</time>" .
+                        ($this->last_modified_iso != $this->date_iso
+                            ? " (created: <time datetime=\"$this->date_iso\">$this->date_human</time>)"
+                            : "")
+                    . "</div>
                     <div class=\"content\">" . $this->content_as_html() . "</div>
                     <div class=\"controls\">
                         <!-- <span class=\"edit\">edit/info</span> -->
