@@ -85,6 +85,7 @@ class Note {
                         <!-- <span class=\"edit\">edit/info</span> -->
                         <span class=\"copy\"><span class=\"hotkey\">c</span>opy</span>
                         <a class=\"download\" href=\"$this->fpath\" download><span class=\"hotkey\">d</span>ownload</a>
+                        <span class=\"bump\"><span class=\"hotkey\">b</span>ump</span>
                         <span class=\"delete\"><span class=\"hotkey\">t</span>rash</span>
                     </div>
                 </div>";
