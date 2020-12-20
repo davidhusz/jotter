@@ -1,7 +1,7 @@
 "use strict";
 
 // Global variables
-var noteList, notificationTimeout;
+var noteList, queryString, queryParams, notificationTimeout;
 
 window.addEventListener("DOMContentLoaded", () => {
   noteList = [];
@@ -23,6 +23,12 @@ window.addEventListener("DOMContentLoaded", () => {
         }
       });
     }
+  }
+  
+  queryString = new URL(window.location).search;
+  queryParams = new URLSearchParams(queryString);
+  if (queryParams.has("initial-notification")) {
+    showNotification(queryParams.get("initial-notification"));
   }
 });
 
