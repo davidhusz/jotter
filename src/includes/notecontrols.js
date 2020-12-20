@@ -102,7 +102,10 @@ function Note(container) {
 function selectNote(note) {
   unselectAllNotes();
   note.container.classList.add("selected");
-  // note.container.scrollIntoView();
+  note.container.scrollIntoView({
+    behavior: "smooth",
+    block: "nearest"
+  });
 }
 
 function unselectNote(note) {

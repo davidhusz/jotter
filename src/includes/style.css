@@ -59,6 +59,7 @@ kbd {
     border: dashed thin silver;
     border-left: 0;
     border-right: 0;
+    scroll-margin: 10em;
     /*
     max-height: 10em;
     overflow: scroll;
