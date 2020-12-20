@@ -20,7 +20,6 @@ class Note {
     
     static function of_unknown_type($fpath) {
         $extension = pathinfo($fpath, PATHINFO_EXTENSION);
-        /*
         switch ($extension) {
             case "txt":
             case "md":
@@ -45,18 +44,6 @@ class Note {
             default:
                 $note = new FileNote($fpath);
                 break;
-        }
-        */
-        if (in_array($extension, ["txt", "md"])) {
-            $note = new TextNote($fpath);
-        } elseif (in_array($extension, ["jpeg", "jpg", "png", "bmp", "svg"])) {
-            $note = new ImageNote($fpath);
-        } elseif (in_array($extension, ["wav", "mp3", "ogg", "3gpp"])) {
-            $note = new AudioNote($fpath);
-        } elseif (in_array($extension, ["mp4"])) {
-            $note = new VideoNote($fpath);
-        } else {
-            $note = new FileNote($fpath);
         }
         return $note;
     }
