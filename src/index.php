@@ -1,16 +1,24 @@
 <?php
+    define("CONTENT_DIR", "contents");
     require "includes/noteclasses.php";
-    $fnames = scandir("contents", SCANDIR_SORT_DESCENDING);
+    $fnames = scandir(CONTENT_DIR);
+    $fnames = array_filter($fnames, function($fname) {
+        // ignore hidden directories and files
+        return ($fname[0] != ".");
+    });
+    $fpaths = array_map(function($fname) {
+        return CONTENT_DIR . "/$fname";
+    }, $fnames);
+    usort($fpaths, function($file1, $file2) {
+        // sort by modification time (newest to oldest);
+        return filemtime("$file2") - filemtime("$file1");
+    });
     if (isset($_GET["count"])) {
-        $fnames = array_slice($fnames, 0, $_GET["count"]);
+        $fpaths = array_slice($fpaths, 0, $_GET["count"]);
     }
     $notes = [];
-    foreach ($fnames as $fname) {
-        $fpath = "contents/$fname";
-        // ignore hidden directories and files
-        if ($fname[0] != ".") {
-            $notes[] = Note::of_unknown_type($fpath);
-        }
+    foreach ($fpaths as $fpath) {
+        $notes[] = Note::of_unknown_type($fpath);
     }
     if ($_SERVER["HTTP_ACCEPT"] == "application/json") {
         header("Content-Type: application/json;charset=utf-8");

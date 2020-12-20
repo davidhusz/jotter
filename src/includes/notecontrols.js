@@ -16,6 +16,8 @@ window.addEventListener("DOMContentLoaded", () => {
       control.addEventListener("click", () => {
         if (controlType == "copy") {
           copyNoteToClipboard(note);
+        } else if (controlType == "bump") {
+          bumpNote(note);
         } else if (controlType == "delete") {
           removeNote(note);
         }
@@ -67,6 +69,12 @@ window.addEventListener("keydown", function(event) {
     case "d":
       if (isAnyNoteSelected()) {
         getSelectedNote().container.querySelector(".download").click();
+      }
+      break;
+    
+    case "b":
+      if (isAnyNoteSelected()) {
+        bumpNote(getSelectedNote());
       }
       break;
     
@@ -187,6 +195,12 @@ function copyNoteToClipboard(note) {
     },
     logError
   )
+}
+
+function bumpNote(note) {
+  performBackendOperation(note, "bump", (response) => {
+    window.location.reload();
+  });
 }
 
 function removeNote(note) {
