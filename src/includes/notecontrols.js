@@ -16,6 +16,8 @@ window.addEventListener("DOMContentLoaded", () => {
       control.addEventListener("click", () => {
         if (controlType == "copy") {
           copyNoteToClipboard(note);
+        } else if (controlType == "bump") {
+          bumpNote(note);
         } else if (controlType == "delete") {
           removeNote(note);
         }
@@ -187,6 +189,12 @@ function copyNoteToClipboard(note) {
     },
     logError
   )
+}
+
+function bumpNote(note) {
+  performBackendOperation(note, "bump", (response) => {
+    window.location.reload();
+  });
 }
 
 function removeNote(note) {
