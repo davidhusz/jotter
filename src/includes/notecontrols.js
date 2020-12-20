@@ -205,7 +205,10 @@ function copyNoteToClipboard(note) {
 
 function bumpNote(note) {
   performBackendOperation(note, "bump", (response) => {
-    window.location.reload();
+    queryParams.set("initial-notification", "Note bumped.");
+    window.location.replace(location.href.replace(location.search, "")
+                            + "?"
+                            + queryParams.toString());
   });
 }
 
