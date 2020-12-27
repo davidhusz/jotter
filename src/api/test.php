@@ -4,4 +4,3 @@ echo "Request info:\n";
 print_r($_REQUEST);
 echo "Files info:\n";
 print_r($_FILES);
-?>

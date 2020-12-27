@@ -36,4 +36,3 @@ function get_path_from_id($id) {
         exit();
     }
 }
-?>
