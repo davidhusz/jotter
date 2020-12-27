@@ -4,6 +4,5 @@ assert_http_method();
 assert_http_parameters("id");
 $fpath = get_path_from_id($_POST["id"]);
 $fname = basename($fpath);
-$trash = "../contents/.trash";
-rename($fpath, "$trash/$fname");
+rename($fpath, CONTENT_DIR . "/.trash/$fname");
 ?>

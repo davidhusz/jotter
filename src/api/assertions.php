@@ -1,4 +1,6 @@
 <?php
+define("CONTENT_DIR", "../contents");
+
 function assert_http_method($allowed_methods = ["POST"]) {
     if (!in_array($_SERVER["REQUEST_METHOD"], $allowed_methods)) {
         http_response_code(405);  // 405 Method Not Allowed
@@ -20,7 +22,8 @@ function assert_http_parameters(...$params) {
 
 function get_path_from_id($id) {
     // TODO: assert that $id is a valid note id
-    $matches = glob("../contents/.*/$id*");  // `.*/` matches `./` as well
+    $matches = glob(CONTENT_DIR . "/.*/$id*");
+    // `.*/` matches `./` as well
     if (count($matches) == 1) {
         return $matches[0];
     } elseif (count($matches) == 0) {
