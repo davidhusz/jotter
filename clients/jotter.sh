@@ -7,6 +7,7 @@
 # IDEA:
 # get rid of the --file flag and treat it as that automatically if a file of
 # that name exists?
+# only require password if user is actually making a request
 # FIXME:
 # `cat $file | jotter new` doesn't work with binary files
 

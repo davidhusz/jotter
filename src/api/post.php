@@ -67,7 +67,8 @@ else {
                 }
                 list($ftype, $ext) = explode("/", $ftype);
                 if (!preg_match("/^[a-z0-9]{1,5}$/", $ext)) {
-                    // If it doesn't look like a file extension, discard it
+                    // If it doesn't look like a file extension, discard it and
+                    // default to 'file'
                     $ext = "file";
                 }
             }
