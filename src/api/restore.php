@@ -1,14 +1,9 @@
 <?php
 require "assertions.php";
 assert_http_method();
-assert_http_parameters("file");
-$fname = $_POST["file"];
-$fpath = "../contents/.trash/$fname";
+assert_http_parameters("id");
+$fpath = get_path_from_id($_POST["id"]);
+$fname = basename($fpath);
 $contents = "../contents";
-if (file_exists($fpath)) {
-    rename($fpath, "$contents/$fname");
-} else {
-    http_response_code(404);
-    echo "File '$fname' does not exist\n";
-}
+rename($fpath, "$contents/$fname");
 ?>
