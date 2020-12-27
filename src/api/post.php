@@ -30,23 +30,23 @@ require "assertions.php";
 assert_http_method();
 
 // Text upload
-if (!isset($_FILES["contents"])) {
-    assert_http_parameters("note");
-    $note = $_POST["note"];
-    $dest = get_unique_filename("txt");
-    file_put_contents($dest, "$note\n");
+if (!isset($_FILES["content"])) {
+    assert_http_parameters("content");
+    $content = $_POST["content"];
+    $fdest = get_unique_filename("txt");
+    file_put_contents($fdest, "$content\n");
 }
 
 // Files upload
 else {
-    $contents = $_FILES["contents"];
-    $fcount = count($contents["name"]);
+    $content = $_FILES["content"];
+    $fcount = count($content["name"]);
     
     for ($i = 0; $i < $fcount; $i++) {
-        if ($contents["error"][$i] == 0) {
-            $fname = $contents["name"][$i];
-            $ftype = $contents["type"][$i];
-            $fsource = $contents["tmp_name"][$i];
+        if ($content["error"][$i] == 0) {
+            $fname = $content["name"][$i];
+            $ftype = $content["type"][$i];
+            $fsource = $content["tmp_name"][$i];
             
             // File type & extension inference
             if (preg_match("/(.+)\.([a-z0-9]{1,5})$/", $fname, $match)) {
