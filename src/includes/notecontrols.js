@@ -94,6 +94,7 @@ window.addEventListener("keydown", function(event) {
 
 function Note(container) {
   this.container = container;
+  this.id = container.id.substring(1);  // removes the 'N' id prefix
   this.type = container.classList[1];
   this.filepath = container.dataset.filepath;
   this.filename = this.filepath.split("/").pop();
@@ -133,7 +134,7 @@ function unselectAllNotes() {
 function performBackendOperation(note, operation, onSuccess) {
   let request = new Request("api/" + operation + ".php", {
     method: "POST",
-    body: "file=" + note.filename,
+    body: "id=" + note.id,
     headers: {
       "Content-Type": "application/x-www-form-urlencoded"
     }

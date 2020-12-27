@@ -1,13 +1,7 @@
 <?php
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        if (isset($_POST["file"])) {
-            $fname = $_POST["file"];
-            $fpath = "../contents/$fname";
-            if (file_exists($fpath)) {
-                touch($fpath);
-            } else {
-                http_response_code(404);
-            }
-        }
-    }
+require "common.php";
+assert_http_method();
+assert_http_parameters("id");
+$fpath = get_path_from_id($_POST["id"]);
+touch($fpath);
 ?>

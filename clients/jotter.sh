@@ -28,20 +28,20 @@ request () {
 
 new () {
     if [ -z "${1:-}" ]; then
-        # request --data-urlencode "note=$(</dev/stdin)"
-        request "$server/api/post.php" --form "contents[]=@-"
+        # request --data-urlencode "content=$(</dev/stdin)"
+        request "$server/api/post.php" --form "content[]=@-"
     elif [ "${1:0:1}" = "-" ]; then
         case "$1" in
             -f|--files)
                 shift
-                request "$server/api/post.php" "${@/#/-Fcontents[]=@}"
+                request "$server/api/post.php" "${@/#/-Fcontent[]=@}"
                 ;;
             *)
                 echo "unknown option '$1'"
                 exit 1
         esac
     else
-        request "$server/api/post.php" --data-urlencode "note=$*"
+        request "$server/api/post.php" --data-urlencode "content=$*"
     fi
 }
 
