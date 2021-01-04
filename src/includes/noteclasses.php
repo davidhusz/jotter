@@ -18,6 +18,19 @@ class Note {
         $this->last_modified_iso = date("c", $this->last_modified);
     }
     
+    function get_info() {
+        $info = [
+            "id" => $this->id,
+            "type" => $this->type,
+            "filepath" => $this->fpath,
+            "filesize" => $this->fsize,
+            "originalFilename" => $this->original_filename,
+            "created" => $this->date_iso,
+            "lastModified" => $this->last_modified_iso
+        ];
+        return $info;
+    }
+    
     static function of_unknown_type($fpath) {
         $extension = pathinfo($fpath, PATHINFO_EXTENSION);
         switch ($extension) {
@@ -59,7 +72,7 @@ class Note {
                . $units[$magnitude];
     }
     
-    function full_html() {
+    function as_html() {
         return "<div id=\"N$this->id\" class=\"note $this->type\" data-filepath=\"$this->fpath\">
                     <div class=\"date\">
                         <time datetime=\"$this->last_modified_iso\">$this->last_modified_human</time>" .
@@ -76,6 +89,10 @@ class Note {
                         <span class=\"delete\"><span class=\"hotkey\">t</span>rash</span>
                     </div>
                 </div>";
+    }
+    
+    function as_json() {
+        return json_encode($this->get_info());
     }
 }
 
@@ -116,12 +133,9 @@ class TextNote extends Note {
         return $this->content;
     }
     
-    function content_as_json() {
-        $info = [
-            "id" => $this->id,
-            "content" => $this->content,
-            "filepath" => $this->fpath
-        ];
+    function as_json() {
+        $info = $this->get_info();
+        $info["content"] = $this->content;
         return json_encode($info);
     }
 }
