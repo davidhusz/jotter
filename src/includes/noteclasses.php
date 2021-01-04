@@ -18,6 +18,19 @@ class Note {
         $this->last_modified_iso = date("c", $this->last_modified);
     }
     
+    function get_info() {
+        $info = [
+            "id" => $this->id,
+            "type" => $this->type,
+            "filepath" => $this->fpath,
+            "filesize" => $this->fsize,
+            "originalFilename" => $this->original_filename,
+            "created" => $this->date_iso,
+            "lastModified" => $this->last_modified_iso
+        ];
+        return $info;
+    }
+    
     static function of_unknown_type($fpath) {
         $extension = pathinfo($fpath, PATHINFO_EXTENSION);
         switch ($extension) {
