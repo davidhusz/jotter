@@ -47,8 +47,13 @@ new () {
 }
 
 latest () {
-    request "$server/?count=1" -H "Accept: application/json" |
-        jq -r ".content"
+    request --get "$server" -d "count=1" -H "Accept: application/json" |
+        jq -r '
+            if .type == "text"
+            then .content
+            else "File: \(.filepath)"
+            end
+        '
 }
 
 usage () {
