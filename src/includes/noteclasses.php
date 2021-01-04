@@ -90,6 +90,10 @@ class Note {
                     </div>
                 </div>";
     }
+    
+    function as_json() {
+        return json_encode($this->get_info());
+    }
 }
 
 
@@ -129,12 +133,9 @@ class TextNote extends Note {
         return $this->content;
     }
     
-        $info = [
-            "id" => $this->id,
-            "content" => $this->content,
-            "filepath" => $this->fpath
-        ];
     function as_json() {
+        $info = $this->get_info();
+        $info["content"] = $this->content;
         return json_encode($info);
     }
 }
