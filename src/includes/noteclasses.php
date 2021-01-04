@@ -59,7 +59,7 @@ class Note {
                . $units[$magnitude];
     }
     
-    function full_html() {
+    function as_html() {
         return "<div id=\"N$this->id\" class=\"note $this->type\" data-filepath=\"$this->fpath\">
                     <div class=\"date\">
                         <time datetime=\"$this->last_modified_iso\">$this->last_modified_human</time>" .
@@ -116,12 +116,12 @@ class TextNote extends Note {
         return $this->content;
     }
     
-    function content_as_json() {
         $info = [
             "id" => $this->id,
             "content" => $this->content,
             "filepath" => $this->fpath
         ];
+    function as_json() {
         return json_encode($info);
     }
 }

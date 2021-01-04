@@ -23,7 +23,7 @@
     if ($_SERVER["HTTP_ACCEPT"] == "application/json") {
         header("Content-Type: application/json;charset=utf-8");
         foreach ($notes as $note) {
-            echo $note->content_as_json()."\n";
+            echo $note->as_json()."\n";
         }
         exit();
     }
@@ -53,7 +53,7 @@
                 <div class="note-list">
                     <?php
                         foreach ($notes as $note) {
-                            echo $note->full_html();
+                            echo $note->as_html();
                         }
                     ?>
                 </div>
