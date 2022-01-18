@@ -22,9 +22,11 @@
     }
     if ($_SERVER["HTTP_ACCEPT"] == "application/json") {
         header("Content-Type: application/json;charset=utf-8");
-        foreach ($notes as $note) {
-            echo $note->as_json()."\n";
-        }
+        echo json_encode([
+            "notes" => array_map(function($note) {
+                return $note->get_info();
+            }, $notes),
+        ])."\n";
         exit();
     }
 ?>

@@ -90,10 +90,6 @@ class Note {
                     </div>
                 </div>";
     }
-    
-    function as_json() {
-        return json_encode($this->get_info());
-    }
 }
 
 
@@ -103,6 +99,12 @@ class TextNote extends Note {
         $this->type = "text";
         $this->content = rtrim(file_get_contents($this->fpath), "\n");
         $this->copy_target = "Note";
+    }
+    
+    function get_info() {
+        $info = parent::get_info();
+        $info["content"] = $this->content;
+        return $info;
     }
     
     function content_as_html() {
@@ -131,12 +133,6 @@ class TextNote extends Note {
             },
             $this->content);
         return $this->content;
-    }
-    
-    function as_json() {
-        $info = $this->get_info();
-        $info["content"] = $this->content;
-        return json_encode($info);
     }
 }
 
