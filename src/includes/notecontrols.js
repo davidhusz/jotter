@@ -33,62 +33,64 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 window.addEventListener("keydown", function(event) {
-  switch (event.key) {
-    case "ArrowDown":
-    case "f":
-      event.preventDefault();
-      if (!isAnyNoteSelected()) {
-        selectNote(noteList[0]);
-      } else {
-        let currentlySelected = noteList.indexOf(getSelectedNote());
-        if (currentlySelected < noteList.length-1) {
-          selectNote(noteList[currentlySelected+1]);
-        } else {
-          unselectAllNotes();
-        }
-      }
-      break;
-    
-    case "ArrowUp":
-    case "w":
-      if (isAnyNoteSelected()) {
+  if (!noteFormIsShown()) {
+    switch (event.key) {
+      case "ArrowDown":
+      case "f":
         event.preventDefault();
-        let currentlySelected = noteList.indexOf(getSelectedNote());
-        if (currentlySelected > 0) {
-          selectNote(noteList[currentlySelected-1]);
+        if (!isAnyNoteSelected()) {
+          selectNote(noteList[0]);
         } else {
-          unselectAllNotes();
+          let currentlySelected = noteList.indexOf(getSelectedNote());
+          if (currentlySelected < noteList.length-1) {
+            selectNote(noteList[currentlySelected+1]);
+          } else {
+            unselectAllNotes();
+          }
         }
-      }
-      break;
-    
-    case "Escape":
-      unselectAllNotes();
-      break;
-    
-    case "c":
-      if (isAnyNoteSelected()) {
-        copyNoteToClipboard(getSelectedNote());
-      }
-      break;
-    
-    case "d":
-      if (isAnyNoteSelected()) {
-        getSelectedNote().container.querySelector(".download").click();
-      }
-      break;
-    
-    case "b":
-      if (isAnyNoteSelected()) {
-        bumpNote(getSelectedNote());
-      }
-      break;
-    
-    case "t": // "t" for trash
-      if (isAnyNoteSelected()) {
-        removeNote(getSelectedNote());
-      }
-      break;
+        break;
+      
+      case "ArrowUp":
+      case "w":
+        if (isAnyNoteSelected()) {
+          event.preventDefault();
+          let currentlySelected = noteList.indexOf(getSelectedNote());
+          if (currentlySelected > 0) {
+            selectNote(noteList[currentlySelected-1]);
+          } else {
+            unselectAllNotes();
+          }
+        }
+        break;
+      
+      case "Escape":
+        unselectAllNotes();
+        break;
+      
+      case "c":
+        if (isAnyNoteSelected()) {
+          copyNoteToClipboard(getSelectedNote());
+        }
+        break;
+      
+      case "d":
+        if (isAnyNoteSelected()) {
+          getSelectedNote().container.querySelector(".download").click();
+        }
+        break;
+      
+      case "b":
+        if (isAnyNoteSelected()) {
+          bumpNote(getSelectedNote());
+        }
+        break;
+      
+      case "t": // "t" for trash
+        if (isAnyNoteSelected()) {
+          removeNote(getSelectedNote());
+        }
+        break;
+    }
   }
 });
 
