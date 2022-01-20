@@ -48,7 +48,7 @@ new () {
 
 latest () {
     request --get "$server" -d "count=1" -H "Accept: application/json" |
-        jq -r '
+        jq -r '.notes[0] |
             if .type == "text"
             then .content
             else "File: \(.filepath)"
