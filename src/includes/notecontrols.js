@@ -3,34 +3,32 @@
 // Global variables
 var noteList, queryString, queryParams, notificationTimeout;
 
-window.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("DOMContentLoaded", updateNoteList);
+
+function updateNoteList() {
   noteList = [];
   for (let noteElement of document.querySelectorAll(".note")) {
-    noteList.push(new Note(noteElement));
+    let note = new Note(noteElement);
+    noteList.push(note);
+    setNoteControls(note);
   }
-  
-  for (let note of noteList) {
-    let controls = note.container.querySelectorAll(".controls > *");
-    for (let control of controls) {
-      let controlType = control.classList[0];
-      control.addEventListener("click", () => {
-        if (controlType == "copy") {
-          copyNoteToClipboard(note);
-        } else if (controlType == "bump") {
-          bumpNote(note);
-        } else if (controlType == "delete") {
-          removeNote(note);
-        }
-      });
-    }
+}
+
+function setNoteControls(note) {
+  let controls = note.container.querySelectorAll(".controls > *");
+  for (let control of controls) {
+    let controlType = control.classList[0];
+    control.onclick = () => {
+      if (controlType == "copy") {
+        copyNoteToClipboard(note);
+      } else if (controlType == "bump") {
+        bumpNote(note);
+      } else if (controlType == "delete") {
+        removeNote(note);
+      }
+    };
   }
-  
-  queryString = new URL(window.location).search;
-  queryParams = new URLSearchParams(queryString);
-  if (queryParams.has("initial-notification")) {
-    showNotification(queryParams.get("initial-notification"));
-  }
-});
+}
 
 window.addEventListener("keydown", function(event) {
   if (!noteFormIsShown()) {
@@ -138,13 +136,16 @@ function performBackendOperation(note, operation, onSuccess) {
     method: "POST",
     body: "id=" + note.id,
     headers: {
+      "Accept": "text/html",
       "Content-Type": "application/x-www-form-urlencoded"
     }
   });
   console.log("Sending request: ", request);
   fetch(request).then(
     (response) => {
-      if (!response.ok) {
+      if (response.ok) {
+        return response.text();
+      } else {
         throw Error("Server returned: " + response.status + " " + response.statusText);
       }
     },
@@ -210,11 +211,14 @@ function copyNoteToClipboard(note) {
 }
 
 function bumpNote(note) {
-  performBackendOperation(note, "bump", (response) => {
-    queryParams.set("initial-notification", "Note bumped.");
-    window.location.replace(location.href.replace(location.search, "")
-                            + "?"
-                            + queryParams.toString());
+  performBackendOperation(note, "bump", (data) => {
+    note.container.remove();
+    let noteListContainer = document.querySelector(".note-list");
+    let newNoteContainer = document.createElement("div");
+    noteListContainer.insertBefore(newNoteContainer, noteListContainer.firstChild);
+    newNoteContainer.outerHTML = data;
+    updateNoteList();
+    showNotification("Note bumped.");
   });
 }
 
