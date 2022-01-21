@@ -15,6 +15,9 @@ Features:
 Download or `git clone` the repository onto a PHP-enabled server. The root of
 the app is the `src` directory.
 
+# API reference
+See [docs.md](docs.md).
+
 # Roadmap
 - Note categories
 	- Important (appearing highlighted at the top of the page)
