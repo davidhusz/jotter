@@ -20,8 +20,8 @@
     foreach ($fpaths as $fpath) {
         $notes[] = Note::of_unknown_type($fpath);
     }
-    if ($_SERVER["HTTP_ACCEPT"] == "application/json") {
-        header("Content-Type: application/json;charset=utf-8");
+    if (!preg_match("/^text\/html/", $_SERVER["HTTP_ACCEPT"])) {
+        header("Content-Type: application/json; charset=UTF-8");
         echo json_encode([
             "notes" => array_map(function($note) {
                 return $note->get_info();
