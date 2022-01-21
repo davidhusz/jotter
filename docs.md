@@ -25,7 +25,7 @@ The content of file notes needs to be individually requested by following the
 ### Example
 Retrieve the three most recent notes as JSON:
 
-	curl -H 'Accept:application/json' 'yourserver.com/?count=5'
+	curl yourserver.com/?count=3
 
 ## Create new note
 	POST /api/post.php
@@ -36,14 +36,14 @@ text notes and `multipart/form-data` for file notes.
 ### Arguments
 - `content`: note content (text or file contents)
 
-### Example
+### Examples
 Create a new text note from standard input:
 
-	curl -X POST yourserver.com/api/post.php --data-urlencode "content=$(cat)"
+	curl yourserver.com/api/post.php --data-urlencode "content=$(cat)"
 
 Save an image as a note:
 
-	curl -X POST yourserver.com/api/post.php -F content[]=@image.png
+	curl yourserver.com/api/post.php --form content[]=@image.png
 
 ## Modify notes
 All of the following commands take a single parameter `id` (see [Retrieve
