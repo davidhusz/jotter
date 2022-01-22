@@ -4,8 +4,8 @@
 	GET /
 
 ### Arguments
-- `count`: number of notes to retrieve (optional)
-- `skip`: number of notes to skip before retrieving (optional)
+- `count` (optional): number of notes to retrieve
+- `skip` (optional): number of notes to skip before retrieving
 
 This returns a JSON object with an array of objects called `notes`, each of
 which has the following attributes:
