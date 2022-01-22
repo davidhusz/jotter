@@ -13,9 +13,8 @@
         // sort by modification time (newest to oldest);
         return filemtime("$file2") - filemtime("$file1");
     });
-    if (isset($_GET["count"])) {
-        $fpaths = array_slice($fpaths, 0, $_GET["count"]);
-    }
+    // Slice array according to `count` and `skip` URL parameters
+    $fpaths = array_slice($fpaths, $_GET["skip"] ?? 0, $_GET["count"] ?? null);
     $notes = [];
     foreach ($fpaths as $fpath) {
         $notes[] = Note::of_unknown_type($fpath);
