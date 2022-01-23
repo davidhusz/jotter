@@ -13,6 +13,13 @@ class Note {
              $this->extension) = $match;
         // This is the filepath with any leading dot hardlink removed
         $this->fpath_absolute = "/" . preg_replace("/^\.+\//", "", $this->fpath);
+        $this->location = array_search(
+            pathinfo($this->fdir)["basename"],
+            array(
+                "main" => "contents",
+                "trash" => ".trash"
+            )
+        );
         $this->date_human = DateTime::createFromFormat("YmdHis", $this->date_digitsonly)->format("D d M Y H:i T");
         $this->date_iso = DateTime::createFromFormat("YmdHis", $this->date_digitsonly)->format("c");
         $this->last_modified = filemtime($fpath);
@@ -24,6 +31,7 @@ class Note {
         $info = [
             "id" => $this->id,
             "type" => $this->type,
+            "location" => $this->location,
             "filepath" => $this->fpath_absolute,
             "filesize" => $this->fsize,
             "originalFilename" => $this->original_filename,
