@@ -57,7 +57,7 @@ function backgroundClickHandler(event) {
 }
 
 function submitNoteForm() {
-  fetch("api/post.php", {
+  fetch("/api/post.php", {
     method: "POST",
     body: "content=" + encodeURIComponent(contentBox.value),
     headers: {

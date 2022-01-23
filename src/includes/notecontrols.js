@@ -132,7 +132,7 @@ function unselectAllNotes() {
 }
 
 function performBackendOperation(note, operation, onSuccess) {
-  let request = new Request("api/" + operation + ".php", {
+  let request = new Request("/api/" + operation + ".php", {
     method: "POST",
     body: "id=" + note.id,
     headers: {
@@ -192,9 +192,8 @@ function copyNoteToClipboard(note) {
               logError
             );
           } else {
-            // copy URL with GET parameters excluded
             navigator.clipboard.writeText(
-              location.href.replace(location.search, "") + note.filepath
+              location.origin + note.filepath
             ).then(
               () => { showNotification("URL copied.") },
               logError

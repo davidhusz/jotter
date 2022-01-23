@@ -11,6 +11,8 @@ class Note {
              $this->date_digitsonly,
              $this->original_filename,
              $this->extension) = $match;
+        // This is the filepath with any leading dot hardlink removed
+        $this->fpath_absolute = "/" . preg_replace("/^\.+\//", "", $this->fpath);
         $this->date_human = DateTime::createFromFormat("YmdHis", $this->date_digitsonly)->format("D d M Y H:i T");
         $this->date_iso = DateTime::createFromFormat("YmdHis", $this->date_digitsonly)->format("c");
         $this->last_modified = filemtime($fpath);
@@ -22,7 +24,7 @@ class Note {
         $info = [
             "id" => $this->id,
             "type" => $this->type,
-            "filepath" => $this->fpath,
+            "filepath" => $this->fpath_absolute,
             "filesize" => $this->fsize,
             "originalFilename" => $this->original_filename,
             "created" => $this->date_iso,
@@ -73,7 +75,7 @@ class Note {
     }
     
     function as_html() {
-        return "<div id=\"N$this->id\" class=\"note $this->type\" data-filepath=\"$this->fpath\">
+        return "<div id=\"N$this->id\" class=\"note $this->type\" data-filepath=\"$this->fpath_absolute\">
                     <div class=\"date\">
                         <time datetime=\"$this->last_modified_iso\">$this->last_modified_human</time>" .
                         ($this->last_modified_iso != $this->date_iso
@@ -84,7 +86,7 @@ class Note {
                     <div class=\"controls\">
                         <!-- <span class=\"edit\">edit/info</span> -->
                         <span class=\"copy\"><span class=\"hotkey\">c</span>opy</span>
-                        <a class=\"download\" href=\"$this->fpath\" download><span class=\"hotkey\">d</span>ownload</a>
+                        <a class=\"download\" href=\"$this->fpath_absolute\" download><span class=\"hotkey\">d</span>ownload</a>
                         <span class=\"bump\"><span class=\"hotkey\">b</span>ump</span>
                         <span class=\"delete\"><span class=\"hotkey\">t</span>rash</span>
                     </div>
@@ -145,7 +147,7 @@ class ImageNote extends Note {
     }
     
     function content_as_html() {
-        return "<a href=\"$this->fpath\"><img src=\"$this->fpath\"></a>";
+        return "<a href=\"$this->fpath_absolute\"><img src=\"$this->fpath_absolute\"></a>";
     }
 }
 
@@ -158,7 +160,7 @@ class AudioNote extends Note {
     }
     
     function content_as_html() {
-        return "<audio controls src=\"$this->fpath\"></audio>";
+        return "<audio controls src=\"$this->fpath_absolute\"></audio>";
     }
 }
 
@@ -171,7 +173,7 @@ class VideoNote extends Note {
     }
     
     function content_as_html() {
-        return "<video controls src=\"$this->fpath\"></video>";
+        return "<video controls src=\"$this->fpath_absolute\"></video>";
     }
 }
 
@@ -184,7 +186,7 @@ class FileNote extends Note {
     }
     
     function content_as_html() {
-        return "File: <a href=\"$this->fpath\">$this->fname</a> (size: "
+        return "File: <a href=\"$this->fpath_absolute\">$this->fname</a> (size: "
                . $this->humanreadable_fsize()
                . ")";
     }
