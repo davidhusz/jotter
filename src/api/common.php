@@ -22,8 +22,10 @@ function assert_http_parameters(...$params) {
 
 function get_path_from_id($id) {
     // TODO: assert that $id is a valid note id
-    $matches = glob(CONTENT_DIR . "/.*/$id*");
-    // `.*/` matches `./` as well
+    $matches = array_merge(
+        glob(CONTENT_DIR . "/$id*"),
+        glob(CONTENT_DIR . "/.trash/$id*")
+    );
     if (count($matches) == 1) {
         return $matches[0];
     } elseif (count($matches) == 0) {
