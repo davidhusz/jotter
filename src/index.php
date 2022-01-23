@@ -1,14 +1,16 @@
 <?php
     define("CONTENT_DIR", "contents");
     require "includes/noteclasses.php";
-    $fnames = scandir(CONTENT_DIR);
-    $fnames = array_filter($fnames, function($fname) {
-        // ignore hidden directories and files
-        return ($fname[0] != ".");
-    });
-    $fpaths = array_map(function($fname) {
-        return CONTENT_DIR . "/$fname";
-    }, $fnames);
+    if (!isset($_GET["location"])) {
+        $fpaths = glob(CONTENT_DIR . "/*");
+    } elseif ($_GET["location"] == "trash") {
+        $fpaths = glob(CONTENT_DIR . "/.trash/*");
+    } elseif ($_GET["location"] == "all") {
+        $fpaths = array_merge(
+            glob(CONTENT_DIR . "/*"),
+            glob(CONTENT_DIR . "/.trash/*")
+        );
+    }
     usort($fpaths, function($file1, $file2) {
         // sort by modification time (newest to oldest);
         return filemtime("$file2") - filemtime("$file1");
