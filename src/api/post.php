@@ -78,3 +78,12 @@ else {
         }
     }
 }
+
+require "../includes/noteclasses.php";
+$note = Note::of_unknown_type($fdest);
+if (!preg_match("/^text\/html/", $_SERVER["HTTP_ACCEPT"])) {
+    header("Content-Type: application/json; charset=UTF-8");
+    echo json_encode($note->get_info())."\n";
+} else {
+    echo $note->as_html()."\n";
+}

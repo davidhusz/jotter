@@ -61,6 +61,7 @@ function submitNoteForm() {
     method: "POST",
     body: "content=" + encodeURIComponent(contentBox.value),
     headers: {
+      "Accept": "text/html",
       "Content-Type": "application/x-www-form-urlencoded"
     }
   }).then(function(response) {
@@ -70,10 +71,15 @@ function submitNoteForm() {
               throw Error(response.statusText);
             }
           })
-    .then(function(message) {
+    .then(function(data) {
+            hideNoteForm();
             contentBox.value = "";
-            console.log("Note saved.");
-            window.location.reload();
+            let noteListContainer = document.querySelector(".note-list");
+            let newNoteContainer = document.createElement("div");
+            noteListContainer.insertBefore(newNoteContainer, noteListContainer.firstChild);
+            newNoteContainer.outerHTML = data;
+            updateNoteList();
+            showNotification("Note saved.");
           })
     .catch(function(error) {
              console.error("Error saving note. Check request history.");
