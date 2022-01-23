@@ -1,0 +1,7 @@
+RewriteEngine on
+# API calls
+RewriteCond %{REQUEST_METHOD} =POST
+RewriteRule ^(post|delete|restore|bump)$ /api/$1.php [L]
+RewriteRule ^test$ /api/test.php [L]
+# Locations
+RewriteRule ^(trash|all)$ /index.php?location=$1&%{QUERY_STRING} [L]
