@@ -79,6 +79,7 @@ else {
     }
 }
 
+http_response_code(201); // 201 Created
 require "../includes/noteclasses.php";
 $note = Note::of_unknown_type($fdest);
 if (!preg_match("/^text\/html/", $_SERVER["HTTP_ACCEPT"])) {
