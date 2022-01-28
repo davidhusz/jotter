@@ -51,6 +51,9 @@ Save an image as a note:
 
 	curl yourserver.com/post --form content[]=@image.png
 
+Upload multiple files:
+
+	curl yourserver.com/post --form content[]=@file1.txt content[]=@file2.txt
 
 ## Modify notes
 All of the following commands take a single parameter `id` (see [Retrieve
