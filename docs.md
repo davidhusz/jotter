@@ -3,6 +3,9 @@
 ## Retrieve notes
 	GET /
 
+To retrieve notes from the trash folder, change the request URI to `/trash`. To
+retrieve notes from both the main folder and the trash folder, use `/all`.
+
 ### Arguments
 - `count` (optional): number of notes to retrieve
 - `skip` (optional): number of notes to skip before retrieving
@@ -12,6 +15,7 @@ which has the following attributes:
 
 - `id`: unique identifier
 - `type`: `text` or `file`
+- `location`: `main` or `trash`
 - `filepath`: location on server
 - `filesize`: size in bytes
 - `originalFilename` (file notes only): name of file as uploaded
@@ -28,10 +32,12 @@ Retrieve the three most recent notes as JSON:
 	curl yourserver.com/?count=3
 
 ## Create new note
-	POST /api/post.php
+	POST /post
 
 Set the `Content-Type` request header to `application/x-www-form-urlencoded` for
-text notes and `multipart/form-data` for file notes.
+text notes and `multipart/form-data` for file notes. If successful, a `201
+Created` response is returned, the body of which contains a JSON representation
+of the newly created note.
 
 ### Arguments
 - `content`: note content (text or file contents)
@@ -39,24 +45,25 @@ text notes and `multipart/form-data` for file notes.
 ### Examples
 Create a new text note from standard input:
 
-	curl yourserver.com/api/post.php --data-urlencode "content=$(cat)"
+	curl yourserver.com/post --data-urlencode "content=$(cat)"
 
 Save an image as a note:
 
-	curl yourserver.com/api/post.php --form content[]=@image.png
+	curl yourserver.com/post --form content[]=@image.png
+
 
 ## Modify notes
 All of the following commands take a single parameter `id` (see [Retrieve
 notes](#retrieve-notes)).
 
 ### Move note to trash
-	POST /api/delete.php
+	POST /delete
 
 ### Restore note from trash
-	POST /api/restore.php
+	POST /restore
 
 ### Bump note up
 This updates the note's last modification time to the current time, like the
 Unix `touch` command.
 
-	POST /api/bump.php
+	POST /bump
