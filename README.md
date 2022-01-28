@@ -12,8 +12,9 @@ Features:
 - A straightforward HTTP API
 
 # Installation
-Download or `git clone` the repository onto a PHP-enabled server. The root of
-the app is the `src` directory.
+Download or `git clone` the repository onto a PHP-enabled server. It must be a
+server that understands `.htaccess` files (such as Apache). The root of the app
+is the `src` directory.
 
 # API reference
 See [docs.md](docs.md).
