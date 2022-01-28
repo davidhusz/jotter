@@ -9,7 +9,7 @@ function assert_http_method($allowed_methods = ["POST"]) {
     }
 }
 
-function assert_http_parameters(...$params) {
+function assert_required_http_parameters(...$params) {
     foreach ($params as $param) {
         if (!isset($_POST[$param])) {
             http_response_code(422);  // 422 Unprocessable Entity

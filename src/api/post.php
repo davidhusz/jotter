@@ -31,7 +31,7 @@ assert_http_method();
 
 // Text upload
 if (!isset($_FILES["content"])) {
-    assert_http_parameters("content");
+    assert_required_http_parameters("content");
     // TODO: account for possibility of multiple content fields
     $content = $_POST["content"];
     $fdest = get_unique_filename("txt");
