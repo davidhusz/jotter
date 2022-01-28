@@ -132,7 +132,7 @@ function unselectAllNotes() {
 }
 
 function performBackendOperation(note, operation, onSuccess) {
-  let request = new Request("/api/" + operation + ".php", {
+  let request = new Request("/" + operation, {
     method: "POST",
     body: "id=" + note.id,
     headers: {
