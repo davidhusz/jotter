@@ -40,7 +40,16 @@ if (!isset($_FILES["content"])) {
 // Files upload
 else {
     $content = $_FILES["content"];
-    $fcount = count($content["name"]);
+    if (!is_array($content["tmp_name"])) {
+        // If the user uploads just one file (not a list of files with one
+        // element, i.e. what you would get by using curl syntax
+        // `content[]=@file`), we turn it into such a one element file list here
+        // so that we don't have to account for it later on
+        $content = array_map(function($prop) {
+            return [$prop];
+        }, $content);
+    }
+    $fcount = count($content["tmp_name"]);
     
     for ($i = 0; $i < $fcount; $i++) {
         if ($content["error"][$i] == 0) {
