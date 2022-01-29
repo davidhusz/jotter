@@ -232,9 +232,11 @@ function removeNote(note) {
 }
 
 function restoreNote(note) {
-  performBackendOperation(note, "restore", (response) => {
-    showNotification("Note restored.");
+  performBackendOperation(note, "restore", (data) => {
+    note.container.outerHTML = data;
     note.container.classList.remove("removed");
+    updateNoteList();
+    showNotification("Note restored.");
   });
 }
 
