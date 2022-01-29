@@ -11,8 +11,10 @@ class Note {
              $this->date_digitsonly,
              $this->original_filename,
              $this->extension) = $match;
-        // This is the filepath with any leading dot hardlink removed
-        $this->fpath_absolute = "/" . preg_replace("/^\.+\//", "", $this->fpath);
+        $app_root_escaped = str_replace("/", "\/", preg_quote(APP_ROOT));
+        // This is the absolute path in terms of the website, i.e. `/` being the
+        // app root.
+        $this->fpath_absolute = preg_replace("/^$app_root_escaped/", "", $this->fpath);
         $this->location = array_search(
             pathinfo($this->fdir)["basename"],
             array(

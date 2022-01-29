@@ -1,5 +1,7 @@
 <?php
-define("CONTENT_DIR", "../contents");
+define("APP_ROOT", realpath(dirname(__FILE__) . "/.."));
+define("CONTENT_DIR", APP_ROOT . "/contents");
+require APP_ROOT . "/includes/noteclasses.php";
 
 function assert_http_method($allowed_methods = ["POST"]) {
     if (!in_array($_SERVER["REQUEST_METHOD"], $allowed_methods)) {
@@ -20,12 +22,23 @@ function assert_required_http_parameters(...$params) {
     }
 }
 
+function get_note_paths($location, $id = "") {
+    if ($location == "main") {
+        $dir = ".";
+    } elseif ($location == "all") {
+        return array_merge(
+            get_note_paths("main", $id),
+            get_note_paths("[A-Za-z0-9]*", $id)
+        );
+    } else {
+        $dir = ".$location";
+    }
+    return array_map('realpath', glob(CONTENT_DIR . "/$dir/$id*"));
+}
+
 function get_path_from_id($id) {
     // TODO: assert that $id is a valid note id
-    $matches = array_merge(
-        glob(CONTENT_DIR . "/$id*"),
-        glob(CONTENT_DIR . "/.trash/$id*")
-    );
+    $matches = get_note_paths("all", $id);
     if (count($matches) == 1) {
         return $matches[0];
     } elseif (count($matches) == 0) {

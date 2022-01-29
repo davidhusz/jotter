@@ -1,16 +1,6 @@
 <?php
-    define("CONTENT_DIR", "contents");
-    require "includes/noteclasses.php";
-    if (!isset($_GET["location"])) {
-        $fpaths = glob(CONTENT_DIR . "/*");
-    } elseif ($_GET["location"] == "trash") {
-        $fpaths = glob(CONTENT_DIR . "/.trash/*");
-    } elseif ($_GET["location"] == "all") {
-        $fpaths = array_merge(
-            glob(CONTENT_DIR . "/*"),
-            glob(CONTENT_DIR . "/.trash/*")
-        );
-    }
+    require "api/common.php";
+    $fpaths = get_note_paths($_GET["location"] ?? "main");
     usort($fpaths, function($file1, $file2) {
         // sort by modification time (newest to oldest);
         return filemtime("$file2") - filemtime("$file1");
