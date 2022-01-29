@@ -1,12 +1,16 @@
 <?php
     require "api/common.php";
-    $fpaths = get_note_paths($_GET["location"] ?? "main");
-    usort($fpaths, function($file1, $file2) {
-        // sort by modification time (newest to oldest);
-        return filemtime("$file2") - filemtime("$file1");
-    });
-    // Slice array according to `count` and `skip` URL parameters
-    $fpaths = array_slice($fpaths, $_GET["skip"] ?? 0, $_GET["count"] ?? null);
+    if (!isset($_GET["id"])) {
+        $fpaths = get_note_paths($_GET["location"] ?? "main");
+        usort($fpaths, function($file1, $file2) {
+            // sort by modification time (newest to oldest);
+            return filemtime("$file2") - filemtime("$file1");
+        });
+        // Slice array according to `count` and `skip` URL parameters
+        $fpaths = array_slice($fpaths, $_GET["skip"] ?? 0, $_GET["count"] ?? null);
+    } else {
+        $fpaths = [get_path_from_id($_GET["id"])];
+    }
     render_notes($fpaths) and exit();
     // Since rendering the notes as a full document is not implemented by the
     // above function yet, we have to do it here
