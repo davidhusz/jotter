@@ -1,5 +1,5 @@
 <?php
-    require "api/common.php";
+    require "includes/common.php";
     if (!isset($_GET["id"])) {
         $fpaths = get_note_paths($_GET["location"] ?? "main");
         usort($fpaths, function($file1, $file2) {
@@ -55,7 +55,7 @@
                     <div class="wrapper2-absolute">
                         <div class="wrapper3-relative">
                             <div class="modal">
-                                <form action="api/post.php" method="post">
+                                <form action="/post" method="post">
                                     <div>
                                         <label for="form-contentbox">
                                             Please enter a new note:
