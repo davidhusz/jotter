@@ -23,10 +23,10 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <link rel="icon" type="image/png" href="/includes/favicon.png">
-        <link rel="stylesheet" href="/includes/style.css">
-        <script type="text/javascript" src="/includes/notecontrols.js"></script>
-        <script type="text/javascript" src="/includes/newnoteform.js"></script>
+        <link rel="icon" type="image/png" href="/assets/favicon.png">
+        <link rel="stylesheet" href="/assets/style.css">
+        <script type="text/javascript" src="/assets/notecontrols.js"></script>
+        <script type="text/javascript" src="/assets/newnoteform.js"></script>
         <title>Notes</title>
     </head>
     <body>
