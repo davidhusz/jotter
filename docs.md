@@ -31,6 +31,9 @@ Retrieve the three most recent notes as JSON:
 
 	curl yourserver.com/?count=3
 
+## Retrieve an individual note
+	GET /note/<id>
+
 ## Create new note
 	POST /post
 

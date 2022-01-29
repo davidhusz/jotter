@@ -9,3 +9,6 @@ RewriteCond %{DOCUMENT_ROOT}/contents/.$1 -d [OR]
 # If the requested location is `all`
 RewriteCond %{REQUEST_URI} /all
 RewriteRule ^(.*)$ /index.php?location=$1&%{QUERY_STRING} [L]
+# Individual notes
+RewriteRule ^note/([^/]+)/download$ /note/$1?download
+RewriteRule ^note/([^/]+)$ /index.php?id=$1&%{QUERY_STRING} [L]
