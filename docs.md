@@ -49,7 +49,7 @@ Create a new text note from standard input:
 
 Save an image as a note:
 
-	curl yourserver.com/post --form content[]=@image.png
+	curl yourserver.com/post --form content=@image.png
 
 Upload multiple files:
 
