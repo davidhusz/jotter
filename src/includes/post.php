@@ -26,7 +26,7 @@ function get_unique_filename($extension, $original_filename = "") {
     return $destination;
 }
 
-require "common.php";
+require "utils.php";
 assert_http_method();
 
 // Text upload

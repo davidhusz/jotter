@@ -1,5 +1,5 @@
 <?php
-    require "includes/common.php";
+    require "includes/utils.php";
     if (!isset($_GET["id"])) {
         $fpaths = get_note_paths($_GET["location"] ?? "main");
         usort($fpaths, function($file1, $file2) {
