@@ -4,4 +4,8 @@ RewriteCond %{REQUEST_METHOD} =POST
 RewriteRule ^(post|delete|restore|bump)$ /api/$1.php [L]
 RewriteRule ^test$ /api/test.php [L]
 # Locations
-RewriteRule ^(trash|all)$ /index.php?location=$1&%{QUERY_STRING} [L]
+# Allow if a (hidden) folder with the name of the requested location exists, or
+RewriteCond %{DOCUMENT_ROOT}/contents/.$1 -d [OR]
+# If the requested location is `all`
+RewriteCond %{REQUEST_URI} /all
+RewriteRule ^(.*)$ /index.php?location=$1&%{QUERY_STRING} [L]
