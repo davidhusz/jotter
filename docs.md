@@ -73,3 +73,8 @@ This updates the note's last modification time to the current time, like the
 Unix `touch` command.
 
 	POST /bump
+
+### Delete note permanently
+**Caution**: This action cannot be undone.
+
+	POST /delete-permanently

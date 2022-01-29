@@ -1,7 +1,7 @@
 RewriteEngine on
 # API calls
 RewriteCond %{REQUEST_METHOD} =POST
-RewriteRule ^(post|delete|restore|bump)$ /api/$1.php [L]
+RewriteRule ^(post|delete|restore|bump|delete-permanently)$ /api/$1.php [L]
 RewriteRule ^test$ /api/test.php [L]
 # Locations
 # Allow if a (hidden) folder with the name of the requested location exists, or
