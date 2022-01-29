@@ -222,7 +222,7 @@ function bumpNote(note) {
 }
 
 function removeNote(note) {
-  performBackendOperation(note, "delete", (data) => {
+  performBackendOperation(note, "trash", (data) => {
     showNotification("Note deleted. <span>Undo</span>", 7);
     note.container.classList.add("removed");
     document.querySelector(".notification span").addEventListener("click", () => {

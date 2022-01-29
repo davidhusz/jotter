@@ -63,7 +63,7 @@ All of the following commands take a single parameter `id` (see [Retrieve
 notes](#retrieve-notes)).
 
 ### Move note to trash
-	POST /delete
+	POST /trash
 
 ### Restore note from trash
 	POST /restore
