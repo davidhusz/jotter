@@ -136,7 +136,7 @@ function performBackendOperation(note, operation, onSuccess) {
     method: "POST",
     body: "id=" + note.id,
     headers: {
-      "Accept": "text/html",
+      "Accept": "text/html;fragment=true",
       "Content-Type": "application/x-www-form-urlencoded"
     }
   });

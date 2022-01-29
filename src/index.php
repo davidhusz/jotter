@@ -7,18 +7,12 @@
     });
     // Slice array according to `count` and `skip` URL parameters
     $fpaths = array_slice($fpaths, $_GET["skip"] ?? 0, $_GET["count"] ?? null);
+    render_notes($fpaths) and exit();
+    // Since rendering the notes as a full document is not implemented by the
+    // above function yet, we have to do it here
     $notes = [];
     foreach ($fpaths as $fpath) {
         $notes[] = Note::of_unknown_type($fpath);
-    }
-    if (!preg_match("/^text\/html/", $_SERVER["HTTP_ACCEPT"])) {
-        header("Content-Type: application/json; charset=UTF-8");
-        echo json_encode([
-            "notes" => array_map(function($note) {
-                return $note->get_info();
-            }, $notes),
-        ])."\n";
-        exit();
     }
 ?>
 <!DOCTYPE html>

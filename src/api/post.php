@@ -96,13 +96,6 @@ else {
 }
 
 http_response_code(201); // 201 Created
-require "../includes/noteclasses.php";
 // TODO: return all new notes here in case multiple were created, not just the
 // last one
-$note = Note::of_unknown_type($fdest);
-if (!preg_match("/^text\/html/", $_SERVER["HTTP_ACCEPT"])) {
-    header("Content-Type: application/json; charset=UTF-8");
-    echo json_encode($note->get_info())."\n";
-} else {
-    echo $note->as_html()."\n";
-}
+render_notes([$fdest]);

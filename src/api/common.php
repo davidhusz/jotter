@@ -51,3 +51,27 @@ function get_path_from_id($id) {
         exit();
     }
 }
+
+function render_notes($fpaths) {
+    $notes = [];
+    foreach ($fpaths as $fpath) {
+        $notes[] = Note::of_unknown_type($fpath);
+    }
+    if (!preg_match("/^text\/html/", $_SERVER["HTTP_ACCEPT"])) {
+        header("Content-Type: application/json; charset=UTF-8");
+        echo json_encode([
+            "notes" => array_map(function($note) {
+                return $note->get_info();
+            }, $notes),
+        ])."\n";
+        return true;
+    } elseif ($_SERVER["HTTP_ACCEPT"] == "text/html;fragment=true") {
+        foreach ($notes as $note) {
+            echo $note->as_html();
+        }
+        return true;
+    } else {
+        // not implemented
+        return false;
+    }
+}
