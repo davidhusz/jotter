@@ -24,6 +24,7 @@ class Note {
         );
         $this->date_human = DateTime::createFromFormat("YmdHis", $this->date_digitsonly)->format("D d M Y H:i T");
         $this->date_iso = DateTime::createFromFormat("YmdHis", $this->date_digitsonly)->format("c");
+        $this->url = "/note/$this->id/raw";
         $this->last_modified = filemtime($fpath);
         $this->last_modified_human = date("D d M Y H:i T", $this->last_modified);
         $this->last_modified_iso = date("c", $this->last_modified);
@@ -85,7 +86,7 @@ class Note {
     }
     
     function as_html() {
-        return "<div id=\"N$this->id\" class=\"note $this->type\" data-filepath=\"$this->fpath_absolute\">
+        return "<div id=\"N$this->id\" class=\"note $this->type\">
                     <div class=\"date\">
                         <time datetime=\"$this->last_modified_iso\">$this->last_modified_human</time>" .
                         ($this->last_modified_iso != $this->date_iso
@@ -96,7 +97,7 @@ class Note {
                     <div class=\"controls\">
                         <!-- <span class=\"edit\">edit/info</span> -->
                         <span class=\"copy\"><span class=\"hotkey\">c</span>opy</span>
-                        <a class=\"download\" href=\"$this->fpath_absolute\" download><span class=\"hotkey\">d</span>ownload</a>
+                        <a class=\"download\" href=\"/note/$this->id/download\"><span class=\"hotkey\">d</span>ownload</a>
                         <span class=\"bump\"><span class=\"hotkey\">b</span>ump</span>
                         <span class=\"delete\"><span class=\"hotkey\">t</span>rash</span>
                     </div>
@@ -157,7 +158,7 @@ class ImageNote extends Note {
     }
     
     function content_as_html() {
-        return "<a href=\"$this->fpath_absolute\"><img src=\"$this->fpath_absolute\"></a>";
+        return "<a href=\"$this->url\"><img src=\"$this->url\"></a>";
     }
 }
 
@@ -170,7 +171,7 @@ class AudioNote extends Note {
     }
     
     function content_as_html() {
-        return "<audio controls src=\"$this->fpath_absolute\"></audio>";
+        return "<audio controls src=\"$this->url\"></audio>";
     }
 }
 
@@ -183,7 +184,7 @@ class VideoNote extends Note {
     }
     
     function content_as_html() {
-        return "<video controls src=\"$this->fpath_absolute\"></video>";
+        return "<video controls src=\"$this->url\"></video>";
     }
 }
 
@@ -196,7 +197,7 @@ class FileNote extends Note {
     }
     
     function content_as_html() {
-        return "File: <a href=\"$this->fpath_absolute\">$this->fname</a> (size: "
+        return "File: <a href=\"$this->url\">$this->fname</a> (size: "
                . $this->humanreadable_fsize()
                . ")";
     }

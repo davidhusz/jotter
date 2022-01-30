@@ -96,8 +96,6 @@ function Note(container) {
   this.container = container;
   this.id = container.id.substring(1);  // removes the 'N' id prefix
   this.type = container.classList[1];
-  this.filepath = container.dataset.filepath;
-  this.filename = this.filepath.split("/").pop();
 }
 
 function selectNote(note) {
@@ -164,7 +162,8 @@ function logError(error) {
 }
 
 function copyNoteToClipboard(note) {
-  fetch(note.filepath).then(
+  let noteFilepath = `/note/${note.id}/raw`;
+  fetch(noteFilepath).then(
     (response) => {
       if (response.ok) {
         return response.text();
@@ -193,7 +192,7 @@ function copyNoteToClipboard(note) {
             );
           } else {
             navigator.clipboard.writeText(
-              location.origin + note.filepath
+              location.origin + noteFilepath
             ).then(
               () => { showNotification("URL copied.") },
               logError
