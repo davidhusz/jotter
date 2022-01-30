@@ -16,15 +16,15 @@ which has the following attributes:
 - `id`: unique identifier
 - `type`: `text` or `file`
 - `location`: `main` or `trash`
-- `filepath`: location on server
+- `filename`: file name as uploaded (for file notes), suggested file name (for
+   text notes)
 - `filesize`: size in bytes
-- `originalFilename` (file notes only): name of file as uploaded
 - `created`: creation time, human-readable
 - `lastModified`: last modification time, human-readable
 - `content` (text notes only): content of note
 
-The content of file notes needs to be individually requested by following the
-`filepath` attribute.
+The content of file notes needs to be [individually
+requested](#retrieve-only-note-contents-no-metadata).
 
 ### Example
 Retrieve the three most recent notes as JSON:

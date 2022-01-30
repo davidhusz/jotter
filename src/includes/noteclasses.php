@@ -3,18 +3,13 @@ class Note {
     function __construct($fpath) {
         $this->fpath = $fpath;
         $this->fsize = filesize($fpath);
-        preg_match("/^(.*\/)?(((\d{14})-\d{5})-?((?:.+)?\.(.+)))$/", $this->fpath, $match);
+        preg_match("/^(.*\/)?((\d{14})-\d{5})-?(.+)?\.(.+)$/", $this->fpath, $match);
         list(,
              $this->fdir,
-             $this->fname,
              $this->id,
              $this->date_digitsonly,
-             $this->original_filename,
+             $this->original_basename,
              $this->extension) = $match;
-        $app_root_escaped = str_replace("/", "\/", preg_quote(APP_ROOT));
-        // This is the absolute path in terms of the website, i.e. `/` being the
-        // app root.
-        $this->fpath_absolute = preg_replace("/^$app_root_escaped/", "", $this->fpath);
         $this->location = array_search(
             pathinfo($this->fdir)["basename"],
             array(
@@ -28,6 +23,7 @@ class Note {
         $this->last_modified = filemtime($fpath);
         $this->last_modified_human = date("D d M Y H:i T", $this->last_modified);
         $this->last_modified_iso = date("c", $this->last_modified);
+        $this->fname = ($this->original_basename ?: "Note from $this->date_human") . ".$this->extension";
     }
     
     function get_info() {
@@ -35,9 +31,8 @@ class Note {
             "id" => $this->id,
             "type" => $this->type,
             "location" => $this->location,
-            "filepath" => $this->fpath_absolute,
+            "filename" => $this->fname,
             "filesize" => $this->fsize,
-            "originalFilename" => $this->original_filename,
             "created" => $this->date_iso,
             "lastModified" => $this->last_modified_iso
         ];

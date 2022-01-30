@@ -51,7 +51,7 @@ latest () {
         jq -r '.notes[0] |
             if .type == "text"
             then .content
-            else "File: \(.filepath)"
+            else "File: '"$server"'/note/\(.id)/raw"
             end
         '
 }
