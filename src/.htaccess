@@ -10,5 +10,5 @@ RewriteCond %{DOCUMENT_ROOT}/contents/.$1 -d [OR]
 RewriteCond %{REQUEST_URI} /all
 RewriteRule ^(.*)$ /index.php?location=$1&%{QUERY_STRING} [L]
 # Individual notes
-RewriteRule ^note/([^/]+)/download$ /note/$1?download
+RewriteRule ^note/([^/]+)/(raw|download)$ /note/$1?fetch=$2
 RewriteRule ^note/([^/]+)$ /index.php?id=$1&%{QUERY_STRING} [L]

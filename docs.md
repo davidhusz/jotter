@@ -34,6 +34,13 @@ Retrieve the three most recent notes as JSON:
 ## Retrieve an individual note
 	GET /note/<id>
 
+### Retrieve only note contents (no metadata)
+	GET /note/<id>/raw
+	GET /note/<id>/download
+
+The difference between these is that `download` will trigger a download when
+opened in a web browser, while `raw` will not[^1].
+
 ## Create new note
 	POST /post
 
@@ -78,3 +85,6 @@ Unix `touch` command.
 	POST /delete-permanently
 
 **Caution**: This action cannot be undone.
+
+[^1]: In technical terms, the `Content-Disposition` header is set to `inline`
+for `raw` and to `attachment` for `download`.
