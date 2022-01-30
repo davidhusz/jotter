@@ -1,0 +1,14 @@
+RewriteEngine on
+# API calls
+RewriteCond %{REQUEST_METHOD} =POST
+RewriteRule ^(post|trash|restore|bump|delete-permanently)$ /includes/$1.php [L]
+RewriteRule ^test$ /includes/test.php [L]
+# Locations
+# Allow if a (hidden) folder with the name of the requested location exists, or
+RewriteCond %{DOCUMENT_ROOT}/contents/.$1 -d [OR]
+# If the requested location is `all`
+RewriteCond %{REQUEST_URI} /all
+RewriteRule ^(.*)$ /index.php?location=$1&%{QUERY_STRING} [L]
+# Individual notes
+RewriteRule ^note/([^/]+)/(raw|download)$ /note/$1?fetch=$2
+RewriteRule ^note/([^/]+)$ /index.php?id=$1&%{QUERY_STRING} [L]

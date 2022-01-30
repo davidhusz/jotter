@@ -3,16 +3,13 @@ class Note {
     function __construct($fpath) {
         $this->fpath = $fpath;
         $this->fsize = filesize($fpath);
-        preg_match("/^(.*\/)?(((\d{14})-\d{5})-?((?:.+)?\.(.+)))$/", $this->fpath, $match);
+        preg_match("/^(.*\/)?((\d{14})-\d{5})-?(.+)?\.(.+)$/", $this->fpath, $match);
         list(,
              $this->fdir,
-             $this->fname,
              $this->id,
              $this->date_digitsonly,
-             $this->original_filename,
+             $this->original_basename,
              $this->extension) = $match;
-        // This is the filepath with any leading dot hardlink removed
-        $this->fpath_absolute = "/" . preg_replace("/^\.+\//", "", $this->fpath);
         $this->location = array_search(
             pathinfo($this->fdir)["basename"],
             array(
@@ -22,9 +19,11 @@ class Note {
         );
         $this->date_human = DateTime::createFromFormat("YmdHis", $this->date_digitsonly)->format("D d M Y H:i T");
         $this->date_iso = DateTime::createFromFormat("YmdHis", $this->date_digitsonly)->format("c");
+        $this->url = "/note/$this->id/raw";
         $this->last_modified = filemtime($fpath);
         $this->last_modified_human = date("D d M Y H:i T", $this->last_modified);
         $this->last_modified_iso = date("c", $this->last_modified);
+        $this->fname = ($this->original_basename ?: "Note from $this->date_human") . ".$this->extension";
     }
     
     function get_info() {
@@ -32,9 +31,8 @@ class Note {
             "id" => $this->id,
             "type" => $this->type,
             "location" => $this->location,
-            "filepath" => $this->fpath_absolute,
+            "filename" => $this->fname,
             "filesize" => $this->fsize,
-            "originalFilename" => $this->original_filename,
             "created" => $this->date_iso,
             "lastModified" => $this->last_modified_iso
         ];
@@ -83,7 +81,7 @@ class Note {
     }
     
     function as_html() {
-        return "<div id=\"N$this->id\" class=\"note $this->type\" data-filepath=\"$this->fpath_absolute\">
+        return "<div id=\"N$this->id\" class=\"note $this->type\">
                     <div class=\"date\">
                         <time datetime=\"$this->last_modified_iso\">$this->last_modified_human</time>" .
                         ($this->last_modified_iso != $this->date_iso
@@ -94,7 +92,7 @@ class Note {
                     <div class=\"controls\">
                         <!-- <span class=\"edit\">edit/info</span> -->
                         <span class=\"copy\"><span class=\"hotkey\">c</span>opy</span>
-                        <a class=\"download\" href=\"$this->fpath_absolute\" download><span class=\"hotkey\">d</span>ownload</a>
+                        <a class=\"download\" href=\"/note/$this->id/download\"><span class=\"hotkey\">d</span>ownload</a>
                         <span class=\"bump\"><span class=\"hotkey\">b</span>ump</span>
                         <span class=\"delete\"><span class=\"hotkey\">t</span>rash</span>
                     </div>
@@ -155,7 +153,7 @@ class ImageNote extends Note {
     }
     
     function content_as_html() {
-        return "<a href=\"$this->fpath_absolute\"><img src=\"$this->fpath_absolute\"></a>";
+        return "<a href=\"$this->url\"><img src=\"$this->url\"></a>";
     }
 }
 
@@ -168,7 +166,7 @@ class AudioNote extends Note {
     }
     
     function content_as_html() {
-        return "<audio controls src=\"$this->fpath_absolute\"></audio>";
+        return "<audio controls src=\"$this->url\"></audio>";
     }
 }
 
@@ -181,7 +179,7 @@ class VideoNote extends Note {
     }
     
     function content_as_html() {
-        return "<video controls src=\"$this->fpath_absolute\"></video>";
+        return "<video controls src=\"$this->url\"></video>";
     }
 }
 
@@ -194,7 +192,7 @@ class FileNote extends Note {
     }
     
     function content_as_html() {
-        return "File: <a href=\"$this->fpath_absolute\">$this->fname</a> (size: "
+        return "File: <a href=\"$this->url\">$this->fname</a> (size: "
                . $this->humanreadable_fsize()
                . ")";
     }

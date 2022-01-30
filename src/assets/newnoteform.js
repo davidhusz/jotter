@@ -57,11 +57,11 @@ function backgroundClickHandler(event) {
 }
 
 function submitNoteForm() {
-  fetch("/api/post.php", {
+  fetch("/post", {
     method: "POST",
     body: "content=" + encodeURIComponent(contentBox.value),
     headers: {
-      "Accept": "text/html",
+      "Accept": "text/html;fragment=true",
       "Content-Type": "application/x-www-form-urlencoded"
     }
   }).then(function(response) {

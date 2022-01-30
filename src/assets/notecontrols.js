@@ -96,8 +96,6 @@ function Note(container) {
   this.container = container;
   this.id = container.id.substring(1);  // removes the 'N' id prefix
   this.type = container.classList[1];
-  this.filepath = container.dataset.filepath;
-  this.filename = this.filepath.split("/").pop();
 }
 
 function selectNote(note) {
@@ -132,11 +130,11 @@ function unselectAllNotes() {
 }
 
 function performBackendOperation(note, operation, onSuccess) {
-  let request = new Request("/api/" + operation + ".php", {
+  let request = new Request("/" + operation, {
     method: "POST",
     body: "id=" + note.id,
     headers: {
-      "Accept": "text/html",
+      "Accept": "text/html;fragment=true",
       "Content-Type": "application/x-www-form-urlencoded"
     }
   });
@@ -164,7 +162,8 @@ function logError(error) {
 }
 
 function copyNoteToClipboard(note) {
-  fetch(note.filepath).then(
+  let noteFilepath = `/note/${note.id}/raw`;
+  fetch(noteFilepath).then(
     (response) => {
       if (response.ok) {
         return response.text();
@@ -193,7 +192,7 @@ function copyNoteToClipboard(note) {
             );
           } else {
             navigator.clipboard.writeText(
-              location.origin + note.filepath
+              location.origin + noteFilepath
             ).then(
               () => { showNotification("URL copied.") },
               logError
@@ -222,7 +221,7 @@ function bumpNote(note) {
 }
 
 function removeNote(note) {
-  performBackendOperation(note, "delete", (response) => {
+  performBackendOperation(note, "trash", (data) => {
     showNotification("Note deleted. <span>Undo</span>", 7);
     note.container.classList.add("removed");
     document.querySelector(".notification span").addEventListener("click", () => {
@@ -232,9 +231,11 @@ function removeNote(note) {
 }
 
 function restoreNote(note) {
-  performBackendOperation(note, "restore", (response) => {
-    showNotification("Note restored.");
+  performBackendOperation(note, "restore", (data) => {
+    note.container.outerHTML = data;
     note.container.classList.remove("removed");
+    updateNoteList();
+    showNotification("Note restored.");
   });
 }
 

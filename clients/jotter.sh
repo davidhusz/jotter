@@ -30,19 +30,19 @@ request () {
 new () {
     if [ -z "${1:-}" ]; then
         # request --data-urlencode "content=$(</dev/stdin)"
-        request "$server/api/post.php" --form "content[]=@-"
+        request "$server/post" --form "content[]=@-"
     elif [ "${1:0:1}" = "-" ]; then
         case "$1" in
             -f|--files)
                 shift
-                request "$server/api/post.php" "${@/#/-Fcontent[]=@}"
+                request "$server/post" "${@/#/-Fcontent[]=@}"
                 ;;
             *)
                 echo "unknown option '$1'"
                 exit 1
         esac
     else
-        request "$server/api/post.php" --data-urlencode "content=$*"
+        request "$server/post" --data-urlencode "content=$*"
     fi
 }
 
@@ -51,7 +51,7 @@ latest () {
         jq -r '.notes[0] |
             if .type == "text"
             then .content
-            else "File: \(.filepath)"
+            else "File: '"$server"'/note/\(.id)/raw"
             end
         '
 }
