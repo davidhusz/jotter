@@ -27,3 +27,13 @@ See [docs.md](docs.md).
 - Bulk processing
 - In-place editing
 - Encrypted notes?
+
+# FAQ
+## Is there a mobile app?
+There is not, however there is a preset for the [`HTTP Shortcuts`
+app](https://http-shortcuts.rmy.ch) for Android that can provide you with
+helpful widgets which work with `jotter`. You can find more information on the
+[preset repository page](https://github.com/davidhusz/jotter-http-shortcuts).
+
+Although I do not have any previous experience with app development, I may still
+attempt to tackle the creation of a dedicated `jotter` app in the future.
