@@ -47,6 +47,7 @@
         <link rel="stylesheet" href="/assets/style.css">
         <script type="text/javascript" src="/assets/notecontrols.js"></script>
         <script type="text/javascript" src="/assets/newnoteform.js"></script>
+        <script type="text/javascript" src="/assets/hotkeys.js"></script>
         <title>Notes</title>
     </head>
     <body>
