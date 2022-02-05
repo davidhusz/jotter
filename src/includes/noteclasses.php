@@ -106,7 +106,6 @@ class TextNote extends Note {
         parent::__construct($fpath);
         $this->type = "text";
         $this->content = rtrim(file_get_contents($this->fpath), "\n");
-        $this->copy_target = "Note";
     }
     
     function get_info() {
@@ -149,7 +148,6 @@ class ImageNote extends Note {
     function __construct($fpath) {
         parent::__construct($fpath);
         $this->type = "image";
-        $this->copy_target = "URL";
     }
     
     function content_as_html() {
@@ -162,7 +160,6 @@ class AudioNote extends Note {
     function __construct($fpath) {
         parent::__construct($fpath);
         $this->type = "audio";
-        $this->copy_target = "URL";
     }
     
     function content_as_html() {
@@ -175,7 +172,6 @@ class VideoNote extends Note {
     function __construct($fpath) {
         parent::__construct($fpath);
         $this->type = "video";
-        $this->copy_target = "URL";
     }
     
     function content_as_html() {
@@ -188,7 +184,6 @@ class FileNote extends Note {
     function __construct($fpath) {
         parent::__construct($fpath);
         $this->type = "file";
-        $this->copy_target = "URL";
     }
     
     function content_as_html() {
