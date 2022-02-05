@@ -1,7 +1,7 @@
 "use strict";
 
 // Global variables
-var noteList, queryString, queryParams, notificationTimeout;
+var noteList, notificationTimeout;
 
 window.addEventListener("DOMContentLoaded", updateNoteList);
 
