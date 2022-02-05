@@ -17,9 +17,10 @@ class Note {
                 "trash" => ".trash"
             )
         );
-        $this->date_human = DateTime::createFromFormat("YmdHis", $this->date_digitsonly)->format("D d M Y H:i T");
-        $this->date_iso = DateTime::createFromFormat("YmdHis", $this->date_digitsonly)->format("c");
         $this->url = "/note/$this->id/raw";
+        $this->date = DateTime::createFromFormat("YmdHis", $this->date_digitsonly)->format("U");
+        $this->date_human = date("D d M Y H:i T", $this->date);
+        $this->date_iso = date("c", $this->date);
         $this->last_modified = filemtime($fpath);
         $this->last_modified_human = date("D d M Y H:i T", $this->last_modified);
         $this->last_modified_iso = date("c", $this->last_modified);
