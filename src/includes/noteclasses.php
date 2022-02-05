@@ -73,13 +73,12 @@ class Note {
     
     function humanreadable_fsize() {
         if ($this->fsize == 0) {
+            // This prevents a division by zero error
             return "0 B";
         }
-        $units = ["KiB", "MiB", "GiB", "TiB", "PiB"];
+        $units = ["B", "KiB", "MiB", "GiB", "TiB", "PiB"];
         $magnitude = floor(log($this->fsize, 1024));
-        return round($this->fsize / 1024 ** $magnitude)
-               . " "
-               . $units[$magnitude];
+        return round($this->fsize / 1024 ** $magnitude)." ".$units[$magnitude];
     }
     
     function as_html() {
