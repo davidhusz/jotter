@@ -30,7 +30,7 @@ function unselectAllNotes() {
 }
 
 window.addEventListener("keydown", function(event) {
-  if (!noteFormIsShown()) {
+  if (!noteFormIsShown() && !(event.ctrlKey || event.altKey || event.shiftKey)) {
     switch (event.key) {
       case "ArrowDown":
       case "f":
