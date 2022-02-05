@@ -1,13 +1,17 @@
 RewriteEngine on
 # API calls
 RewriteCond %{REQUEST_METHOD} =POST
-RewriteRule ^(post|trash|restore|bump|delete-permanently)$ /includes/$1.php [L]
+RewriteRule ^(post|trash|restore|bump|delete-permanently)$ /includes/$1.php [END]
 # Locations
 # Allow if a (hidden) folder with the name of the requested location exists, or
 RewriteCond %{DOCUMENT_ROOT}/contents/.$1 -d [OR]
 # If the requested location is `all`
 RewriteCond %{REQUEST_URI} =/all
-RewriteRule ^(.*)$ /index.php?location=$1&%{QUERY_STRING} [L]
+RewriteRule ^(.*)$ /index.php?location=$1&%{QUERY_STRING} [END]
 # Individual notes
-RewriteRule ^note/([^/]+)/(raw|download)$ /note/$1?fetch=$2
-RewriteRule ^note/([^/]+)$ /index.php?id=$1&%{QUERY_STRING} [L]
+RewriteRule ^note/([^/]+)/(raw|download)$ /note/$1?fetch=$2 [L]
+RewriteRule ^note/([^/]+)$ /index.php?id=$1&%{QUERY_STRING} [END]
+# Deny all requests to direct file paths except those necessary for the website
+# to work
+RewriteCond %{REQUEST_URI} !^/assets/.*$
+RewriteRule ^.*$ - [R=404,L]
