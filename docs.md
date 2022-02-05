@@ -19,8 +19,8 @@ which has the following attributes:
 - `filename`: file name as uploaded (for file notes), suggested file name (for
    text notes)
 - `filesize`: size in bytes
-- `created`: creation time, human-readable
-- `lastModified`: last modification time, human-readable
+- `created`: creation time in ISO 8601 format
+- `lastModified`: last modification time in ISO 8601 format
 - `content` (text notes only): content of note
 
 The content of file notes needs to be [individually
