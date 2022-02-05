@@ -55,7 +55,7 @@
             <header>
                 <h1>Notes</h1>
                 <noscript>
-                    You have disabled JavaScript. Interactive components, such as the copy or the delete function, will not work correctly.
+                    You have disabled JavaScript. Interactive components, such as the copy or the trash function, will not work correctly.
                 </noscript>
                 <div class="instructions">
                     click <span class="clickable note-form-button">here</span> or press <kbd>N</kbd> to create a new note

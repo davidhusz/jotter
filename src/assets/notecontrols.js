@@ -23,7 +23,7 @@ function setNoteControls(note) {
         copyNoteToClipboard(note);
       } else if (controlType == "bump") {
         bumpNote(note);
-      } else if (controlType == "delete") {
+      } else if (controlType == "trash") {
         removeNote(note);
       }
     };
@@ -129,7 +129,7 @@ function bumpNote(note) {
 
 function removeNote(note) {
   performBackendOperation(note, "trash", (data) => {
-    showNotification("Note deleted. <span>Undo</span>", 7);
+    showNotification("Note moved to trash. <span>Undo</span>", 7);
     note.container.classList.add("removed");
     document.querySelector(".notification span").addEventListener("click", () => {
       restoreNote(note);
