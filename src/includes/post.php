@@ -14,11 +14,7 @@ function get_unique_filename($extension, $original_filename = "") {
     }
     
     if (!empty($original_filename)) {
-        // Problematic characters will be removed from file name
-        $destination = "$dir/$id-"
-                       . preg_replace("/[^A-Za-z0-9_-]/", "", $original_filename)
-                       // allow dots too maybe?
-                       . ".$extension";
+        $destination = "$dir/$id-".urlencode($original_filename).".$extension";
     } else {
         $destination = "$dir/$id.$extension";
     }

@@ -8,7 +8,7 @@ class Note {
              $this->fdir,
              $this->id,
              $this->date_digitsonly,
-             $this->original_basename,
+             $this->original_basename_urlencoded,
              $this->extension) = $match;
         $this->location = array_search(
             pathinfo($this->fdir)["basename"],
@@ -24,6 +24,7 @@ class Note {
         $this->last_modified = filemtime($fpath);
         $this->last_modified_human = date("D d M Y H:i T", $this->last_modified);
         $this->last_modified_iso = date("c", $this->last_modified);
+        $this->original_basename = urldecode($this->original_basename_urlencoded);
         $this->fname = ($this->original_basename ?: "Note from $this->date_human") . ".$this->extension";
     }
     
