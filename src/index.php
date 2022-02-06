@@ -1,43 +1,43 @@
 <?php
-    require "includes/utils.php";
-    if (!isset($_GET["id"])) {
-        $fpaths = get_note_paths($_GET["location"] ?? "main");
-        usort($fpaths, function($file1, $file2) {
-            // sort by modification time (newest to oldest);
-            return filemtime("$file2") - filemtime("$file1");
-        });
-        // Slice array according to `count` and `skip` URL parameters
-        $fpaths = array_slice($fpaths, $_GET["skip"] ?? 0, $_GET["count"] ?? null);
+require "includes/utils.php";
+if (!isset($_GET["id"])) {
+    $fpaths = get_note_paths($_GET["location"] ?? "main");
+    usort($fpaths, function($file1, $file2) {
+        // sort by modification time (newest to oldest);
+        return filemtime("$file2") - filemtime("$file1");
+    });
+    // Slice array according to `count` and `skip` URL parameters
+    $fpaths = array_slice($fpaths, $_GET["skip"] ?? 0, $_GET["count"] ?? null);
+} else {
+    $fpath = get_path_from_id($_GET["id"]);
+    if (!isset($_GET["fetch"])) {
+        $fpaths = [$fpath];
     } else {
-        $fpath = get_path_from_id($_GET["id"]);
-        if (!isset($_GET["fetch"])) {
-            $fpaths = [$fpath];
-        } else {
-            $note = Note::of_unknown_type($fpath);
-            $mime_type = mime_content_type($fpath);
-            $fetch_dispositions = [
-                "raw" => "inline",
-                "download" => "attachment"
-            ];
-            $disposition = $fetch_dispositions[$_GET["fetch"]];
-            $fname_quoted = '"' . str_replace('"', '\"', $note->fname) . '"';
-            $date = gmdate("D, d M Y H:i:s T", $note->last_modified);
-            $fhandle = fopen($fpath, 'rb');
-            header("Content-Type: $mime_type");
-            header("Content-Length: $note->fsize");
-            header("Content-Disposition: $disposition; filename=$fname_quoted");
-            header("Last-Modified: $date");
-            fpassthru($fhandle);
-            exit();
-        }
+        $note = Note::of_unknown_type($fpath);
+        $mime_type = mime_content_type($fpath);
+        $fetch_dispositions = [
+            "raw" => "inline",
+            "download" => "attachment"
+        ];
+        $disposition = $fetch_dispositions[$_GET["fetch"]];
+        $fname_quoted = '"' . str_replace('"', '\"', $note->fname) . '"';
+        $date = gmdate("D, d M Y H:i:s T", $note->last_modified);
+        $fhandle = fopen($fpath, 'rb');
+        header("Content-Type: $mime_type");
+        header("Content-Length: $note->fsize");
+        header("Content-Disposition: $disposition; filename=$fname_quoted");
+        header("Last-Modified: $date");
+        fpassthru($fhandle);
+        exit();
     }
-    render_notes($fpaths) and exit();
-    // Since rendering the notes as a full document is not implemented by the
-    // above function yet, we have to do it here
-    $notes = [];
-    foreach ($fpaths as $fpath) {
-        $notes[] = Note::of_unknown_type($fpath);
-    }
+}
+render_notes($fpaths) and exit();
+// Since rendering the notes as a full document is not implemented by the
+// above function yet, we have to do it here
+$notes = [];
+foreach ($fpaths as $fpath) {
+    $notes[] = Note::of_unknown_type($fpath);
+}
 ?>
 <!DOCTYPE html>
 <html>
