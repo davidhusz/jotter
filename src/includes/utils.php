@@ -3,24 +3,33 @@ define("APP_ROOT", realpath(dirname(__FILE__) . "/.."));
 define("CONTENT_DIR", APP_ROOT . "/contents");
 require APP_ROOT . "/includes/noteclasses.php";
 
-function assert_http_method($allowed_methods = ["POST"]) {
-    if (!in_array($_SERVER["REQUEST_METHOD"], $allowed_methods)) {
-        http_response_code(405);  // 405 Method Not Allowed
+function errorResponse($status, $message = "") {
+    http_response_code($status);
+    if (!empty($message)) {
+        header("Content-Type: text/plain");
+        echo "$message\n";
+    } else {
         // Remove the Content-Type header since the response body will be empty
         header("Content-Type:");
-        header("Allow: " . implode(", ", $allowed_methods));
-        exit();
+    }
+    exit();
+}
+
+function assert_http_method($allowed_methods = ["POST"]) {
+    if (!in_array($_SERVER["REQUEST_METHOD"], $allowed_methods)) {
+        header("Allow: ".implode(", ", $allowed_methods));
+        // 405 Method Not Allowed
+        errorResponse(405);
     }
 }
 
 function assert_required_http_parameters(...$params) {
     foreach ($params as $param) {
         if (!isset($_POST[$param])) {
-            http_response_code(422);  // 422 Unprocessable Entity
-            header("Content-Type: text/plain");
-            echo "The following parameters are required: "
-                  . implode(", ", $params) . "\n";
-            exit();
+            // 422 Unprocessable Entity
+            errorResponse(422,
+                "The following parameters are required: ".implode(", ", $params)
+            );
         }
     }
 }
@@ -45,15 +54,11 @@ function get_path_from_id($id) {
     if (count($matches) == 1) {
         return $matches[0];
     } elseif (count($matches) == 0) {
-        http_response_code(404);  // 404 Not Found
-        header("Content-Type: text/plain");
-        echo "There is no note with id $id\n";
-        exit();
+        // 404 Not Found
+        errorResponse(404, "There is no note with id $id");
     } else {
-        http_response_code(500);  // 500 Internal Server Error
-        header("Content-Type: text/plain");
-        echo "There are multiple notes with id $id\n";
-        exit();
+        // 500 Internal Server Error
+        errorResponse(500, "There are multiple notes with id $id");
     }
 }
 
