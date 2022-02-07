@@ -9,7 +9,7 @@ if (!isset($_GET["id"])) {
     // Slice array according to `count` and `skip` URL parameters
     $fpaths = array_slice($fpaths, $_GET["skip"] ?? 0, $_GET["count"] ?? null);
 } else {
-    $fpath = get_path_from_id($_GET["id"]);
+    $fpath = get_note_path_from_id($_GET["id"]);
     if (!isset($_GET["fetch"])) {
         $fpaths = [$fpath];
     } else {

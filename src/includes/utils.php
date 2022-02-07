@@ -48,7 +48,7 @@ function get_note_paths($location, $id = "") {
     return array_map('realpath', glob(CONTENT_DIR . "/$dir/$id*"));
 }
 
-function get_path_from_id($id) {
+function get_note_path_from_id($id) {
     // TODO: assert that $id is a valid note id
     $matches = get_note_paths("all", $id);
     if (count($matches) == 1) {
