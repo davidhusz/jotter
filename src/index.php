@@ -1,11 +1,22 @@
 <?php
 require "includes/utils.php";
 if (!isset($_GET["id"])) {
-    $fpaths = get_note_paths($_GET["location"] ?? "main");
+    $location = $_GET["location"] ?? "main";
+    $fpaths = get_note_paths($location);
     usort($fpaths, function($file1, $file2) {
         // sort by modification time (newest to oldest);
         return filemtime("$file2") - filemtime("$file1");
     });
+    if (isset($_GET["before"])) {
+        $before_path = get_note_path_from_id($_GET["before"], $location);
+        $length = array_search($before_path, $fpaths);
+    }
+    if (isset($_GET["after"])) {
+        $after_path = get_note_path_from_id($_GET["after"], $location);
+        $offset = array_search($after_path, $fpaths) + 1;
+    }
+    // Slice array according to `before` and `after` URL parameters
+    $fpaths = array_slice($fpaths, $offset ?? 0, $length ?? null);
     // Slice array according to `count` and `skip` URL parameters
     $fpaths = array_slice($fpaths, $_GET["skip"] ?? 0, $_GET["count"] ?? null);
 } else {
