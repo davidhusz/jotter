@@ -91,3 +91,21 @@ function render_notes($fpaths) {
         return false;
     }
 }
+
+function render_raw_note($fpath, $fetch) {
+    $note = Note::of_unknown_type($fpath);
+    $mime_type = mime_content_type($fpath);
+    $fetch_dispositions = [
+        "raw" => "inline",
+        "download" => "attachment"
+    ];
+    $disposition = $fetch_dispositions[$_GET["fetch"]];
+    $fname_quoted = '"' . str_replace('"', '\"', $note->fname) . '"';
+    $date = gmdate("D, d M Y H:i:s T", $note->last_modified);
+    $fhandle = fopen($fpath, 'rb');
+    header("Content-Type: $mime_type");
+    header("Content-Length: $note->fsize");
+    header("Content-Disposition: $disposition; filename=$fname_quoted");
+    header("Last-Modified: $date");
+    fpassthru($fhandle);
+}
