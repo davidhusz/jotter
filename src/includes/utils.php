@@ -49,7 +49,9 @@ function get_note_paths($location, $id = "") {
 }
 
 function get_note_path_from_id($id, $location = "all") {
-    // TODO: assert that $id is a valid note id
+    if (!preg_match("/^\d{14}-\d{5}$/", $id)) {
+        errorResponse(404, "'$id' is not a valid note id");
+    }
     $matches = get_note_paths($location, $id);
     $note_description =
         "with id $id" .
