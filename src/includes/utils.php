@@ -48,17 +48,21 @@ function get_note_paths($location, $id = "") {
     return array_map('realpath', glob(CONTENT_DIR . "/$dir/$id*"));
 }
 
-function get_note_path_from_id($id) {
+function get_note_path_from_id($id, $location = "all") {
     // TODO: assert that $id is a valid note id
-    $matches = get_note_paths("all", $id);
+    $matches = get_note_paths($location, $id);
+    $note_description =
+        "with id $id" .
+        ($location === "all" ? "" : " in this location") .
+        ".";
     if (count($matches) == 1) {
         return $matches[0];
     } elseif (count($matches) == 0) {
         // 404 Not Found
-        errorResponse(404, "There is no note with id $id");
+        errorResponse(404, "There is no note $note_description");
     } else {
         // 500 Internal Server Error
-        errorResponse(500, "There are multiple notes with id $id");
+        errorResponse(500, "There are multiple notes $note_description");
     }
 }
 
