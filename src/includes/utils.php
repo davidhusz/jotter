@@ -68,6 +68,26 @@ function get_note_path_from_id($id, $location = "all") {
     }
 }
 
+function performNoteOperation($operation, $render_before = false, ...$arguments) {
+    assert_http_method();
+    assert_required_http_parameters("id");
+    $fpath = get_note_path_from_id($_POST["id"]);
+    if ($render_before) {
+        render_notes([$fpath]);
+    }
+    $fpath_new = call_user_func($operation, $fpath, ...$arguments);
+    if (!$render_before) {
+        render_notes([$fpath_new]);
+    }
+}
+
+function move_note($fpath, $new_location) {
+    $fname = basename($fpath);
+    $fpath_new = CONTENT_DIR."/.$new_location/$fname";
+    rename($fpath, $fpath_new);
+    return realpath($fpath_new);
+}
+
 function render_notes($fpaths) {
     $notes = [];
     foreach ($fpaths as $fpath) {
