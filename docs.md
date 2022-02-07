@@ -6,12 +6,6 @@
 To retrieve notes from the trash folder, change the request URI to `/trash`. To
 retrieve notes from both the main folder and the trash folder, use `/all`.
 
-### Arguments
-- `count` (optional): number of notes to retrieve
-- `skip` (optional): number of notes to skip before retrieving
-- `before` (optional): retrieve only notes newer than the note with this id
-- `after` (optional): retrieve only notes older than the note with this id
-
 This returns a JSON object with an array of objects called `notes`, each of
 which has the following attributes:
 
@@ -27,6 +21,18 @@ which has the following attributes:
 
 The content of file notes needs to be [individually
 requested](#retrieve-only-note-contents-no-metadata).
+
+### Query string parameters
+These are the parameters that can be appended to the URL, and they are listed
+here in the order in which they will be evaluated. For example, given the query
+string `count=3&after=xyz`, first all notes before and including the note with
+id `xyz` will be discarded, and afterwards the list will the truncated to three
+notes.
+
+- `before`: retrieve only notes newer than the note with this id
+- `after`: retrieve only notes older than the note with this id
+- `count`: number of notes to retrieve
+- `skip`: number of notes to skip before retrieving
 
 ### Example
 Retrieve the three most recent notes as JSON:
