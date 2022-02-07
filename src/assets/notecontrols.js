@@ -1,9 +1,21 @@
 "use strict";
 
 // Global variables
-var noteList, notificationTimeout;
+var noteList, notificationTimeout, lastFetch;
 
-window.addEventListener("DOMContentLoaded", updateNoteList);
+window.addEventListener("DOMContentLoaded", () => {
+  updateNoteList();
+  lastFetch = Date.now();
+});
+
+window.addEventListener("focus", () => {
+  let now = Date.now();
+  // If it has been more than one second since we last fetched the latest notes
+  if ((now - lastFetch) > 1000) {
+    fetchLatestNotes();
+    lastFetch = now;
+  }
+});
 
 function updateNoteList() {
   noteList = [];
@@ -28,6 +40,36 @@ function setNoteControls(note) {
       }
     };
   }
+}
+
+function fetchLatestNotes() {
+  let lastSeenNote = noteList.find(
+    note => !note.container.classList.contains("removed")
+  );
+  fetch(`${location.pathname}?before=${lastSeenNote.id}`, {
+    headers: {
+      "Accept": "text/html;fragment=true"
+    }
+  }).then(
+    (response) => {
+      if (response.ok) {
+        return response.text();
+      } else {
+        throw Error(response.statusText);
+      }
+    }
+  ).then(
+    (data) => {
+      if (data !== "") {
+        let noteListContainer = document.querySelector(".note-list");
+        let newNoteContainer = document.createElement("div");
+        noteListContainer.insertBefore(newNoteContainer, noteListContainer.firstChild);
+        newNoteContainer.outerHTML = data;
+        updateNoteList();
+        showNotification("Fetched latest notes.");
+      }
+    }
+  )
 }
 
 function Note(container) {
