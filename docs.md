@@ -9,6 +9,8 @@ retrieve notes from both the main folder and the trash folder, use `/all`.
 ### Arguments
 - `count` (optional): number of notes to retrieve
 - `skip` (optional): number of notes to skip before retrieving
+- `before` (optional): retrieve only notes newer than the note with this id
+- `after` (optional): retrieve only notes older than the note with this id
 
 This returns a JSON object with an array of objects called `notes`, each of
 which has the following attributes:
