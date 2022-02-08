@@ -57,27 +57,11 @@ function backgroundClickHandler(event) {
 }
 
 function submitNoteForm() {
-  fetch("/post", {
-    method: "POST",
-    body: "content=" + encodeURIComponent(contentBox.value),
-    headers: {
-      "Accept": "text/html;fragment=true",
-      "Content-Type": "application/x-www-form-urlencoded"
-    }
-  }).then(function(response) {
-            if (response.ok) {
-              return response.text();
-            } else {
-              throw Error(response.statusText);
-            }
-          })
-    .then(function(data) {
-            hideNoteForm();
-            contentBox.value = "";
-            prependToNoteList(data);
-            showNotification("Note saved.");
-          })
-    .catch(function(error) {
-             console.error("Error saving note. Check request history.");
-           })
+  let content = encodeURIComponent(contentBox.value);
+  sendBackendRequest("/post", `content=${content}`, data => {
+    hideNoteForm();
+    contentBox.value = "";
+    prependToNoteList(data);
+    showNotification("Note saved.");
+  });
 }

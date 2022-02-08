@@ -54,26 +54,12 @@ function fetchLatestNotes() {
   let lastSeenNote = noteList.find(
     note => !note.container.classList.contains("removed")
   );
-  fetch(`${location.pathname}?before=${lastSeenNote.id}`, {
-    headers: {
-      "Accept": "text/html;fragment=true"
+  sendBackendRequest(`${location.pathname}?before=${lastSeenNote.id}`, false, data => {
+    if (data !== "") {
+      prependToNoteList(data);
+      showNotification("Fetched latest notes");
     }
-  }).then(
-    (response) => {
-      if (response.ok) {
-        return response.text();
-      } else {
-        throw Error(response.statusText);
-      }
-    }
-  ).then(
-    (data) => {
-      if (data !== "") {
-        prependToNoteList(data);
-        showNotification("Fetched latest notes.");
-      }
-    }
-  )
+  });
 }
 
 function Note(container) {
@@ -82,27 +68,23 @@ function Note(container) {
   this.type = container.classList[1];
 }
 
-function performBackendOperation(note, operation, onSuccess) {
-  let request = new Request("/" + operation, {
-    method: "POST",
-    body: "id=" + note.id,
+function sendBackendRequest(endpoint, data, onSuccess) {
+  fetch(endpoint, {
+    method: data ? "POST" : "GET",
+    ...(data ? {body: data} : {}),
     headers: {
       "Accept": "text/html;fragment=true",
       "Content-Type": "application/x-www-form-urlencoded"
     }
-  });
-  console.log("Sending request: ", request);
-  fetch(request).then(
-    (response) => {
+  }).then(
+    response => {
       if (response.ok) {
         return response.text();
       } else {
-        throw Error("Server returned: " + response.status + " " + response.statusText);
+        throw response;
       }
     },
-    (error) => {
-      throw Error("Could not send request. " + error);
-    }
+    logError
   ).then(
     onSuccess,
     logError
@@ -111,58 +93,48 @@ function performBackendOperation(note, operation, onSuccess) {
 
 function logError(error) {
   console.error(error);
+  // showNotification("An error occurred. Check console for details.");
   showNotification("Error. Check console");
 }
 
 function copyNoteToClipboard(note) {
   let noteFilepath = `/note/${note.id}/raw`;
-  fetch(noteFilepath).then(
-    (response) => {
-      if (response.ok) {
-        return response.text();
-      } else {
-        throw Error("Server returned: " + response.status + " " + response.statusText);
-      }
-    }
-  ).then(
-    (contents) => {
-      contents = contents.trimEnd();
-      // TODO: account for different kinds of MIME types
-      if (navigator.clipboard !== undefined) {
-        // this only works with https apparently
-        // also, it has to be triggered via a user event
-        try {
-          let contentsForClipboard = [new ClipboardItem({"text/plain": contents})];
-          navigator.clipboard.write(contentsForClipboard).then(
+  sendBackendRequest(noteFilepath, false, contents => {
+    contents = contents.trimEnd();
+    // TODO: account for different kinds of MIME types
+    if (navigator.clipboard !== undefined) {
+      // this only works with https apparently
+      // also, it has to be triggered via a user event
+      try {
+        let contentsForClipboard = [new ClipboardItem({"text/plain": contents})];
+        navigator.clipboard.write(contentsForClipboard).then(
+          () => { showNotification("Note copied.") },
+          logError
+        )
+      } catch (error) {
+        if (note.type == "text") {
+          navigator.clipboard.writeText(contents).then(
             () => { showNotification("Note copied.") },
             logError
-          )
-        } catch (error) {
-          if (note.type == "text") {
-            navigator.clipboard.writeText(contents).then(
-              () => { showNotification("Note copied.") },
-              logError
-            );
-          } else {
-            navigator.clipboard.writeText(
-              location.origin + noteFilepath
-            ).then(
-              () => { showNotification("URL copied.") },
-              logError
-            );
-          }
+          );
+        } else {
+          navigator.clipboard.writeText(
+            location.origin + noteFilepath
+          ).then(
+            () => { showNotification("URL copied.") },
+            logError
+          );
         }
-      } else {
-        // fallback using prompt pop-up
-        prompt("Clipboard cannot be accessed, please copy manually", contents);
       }
-    },
-    logError
-  )
+    } else {
+      // fallback using prompt pop-up
+      prompt("Clipboard cannot be accessed, please copy manually", contents);
+    }
+  });
 }
 
 function bumpNote(note) {
-  performBackendOperation(note, "bump", (data) => {
+  sendBackendRequest("/bump", `id=${note.id}`, data => {
     note.container.remove();
     prependToNoteList(data);
     showNotification("Note bumped.");
@@ -170,9 +142,9 @@ function bumpNote(note) {
 }
 
 function removeNote(note) {
-  performBackendOperation(note, "trash", (data) => {
-    showNotification("Note moved to trash. <span>Undo</span>", 7);
+  sendBackendRequest("/trash", `id=${note.id}`, data => {
     note.container.classList.add("removed");
+    showNotification("Note moved to trash. <span>Undo</span>", 7);
     document.querySelector(".notification span").addEventListener("click", () => {
       restoreNote(note);
     });
@@ -180,7 +152,7 @@ function removeNote(note) {
 }
 
 function restoreNote(note) {
-  performBackendOperation(note, "restore", (data) => {
+  sendBackendRequest("/restore", `id=${note.id}`, data => {
     note.container.outerHTML = data;
     note.container.classList.remove("removed");
     updateNoteList();
