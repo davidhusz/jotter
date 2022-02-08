@@ -3,15 +3,15 @@
 ## Retrieve notes
 	GET /
 
-To retrieve notes from the trash folder, change the request URI to `/trash`. To
-retrieve notes from both the main folder and the trash folder, use `/all`.
+To retrieve notes from locations other than the main folder, change the request
+URI to `/archive` or `/trash`. To retrieve notes from all locations, use `/all`.
 
-This returns a JSON object with an array of objects called `notes`, each of
-which has the following attributes:
+This request returns a JSON object with an array of objects called `notes`, each
+of which has the following attributes:
 
 - `id`: unique identifier
 - `type`: `text` or `file`
-- `location`: `main` or `trash`
+- `location`: `main`, `archive` or `trash`
 - `filename`: file name as uploaded (for file notes), suggested file name (for
    text notes)
 - `filesize`: size in bytes
