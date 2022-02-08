@@ -84,7 +84,7 @@ window.addEventListener("keydown", function(event) {
       
       case "t": // "t" for trash
         if (isAnyNoteSelected()) {
-          removeNote(getSelectedNote());
+          trashNote(getSelectedNote());
         }
         break;
     }

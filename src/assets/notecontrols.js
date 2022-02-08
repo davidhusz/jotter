@@ -44,7 +44,7 @@ function setNoteControls(note) {
       } else if (controlType == "bump") {
         bumpNote(note);
       } else if (controlType == "trash") {
-        removeNote(note);
+        trashNote(note);
       }
     };
   }
@@ -141,7 +141,7 @@ function bumpNote(note) {
   });
 }
 
-function removeNote(note) {
+function trashNote(note) {
   sendBackendRequest("/trash", `id=${note.id}`, data => {
     note.container.classList.add("removed");
     showNotification("Note moved to trash. <span>Undo</span>", 7);
