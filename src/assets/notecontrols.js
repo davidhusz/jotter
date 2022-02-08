@@ -26,6 +26,14 @@ function updateNoteList() {
   }
 }
 
+function prependToNoteList(noteHTML) {
+    let noteListContainer = document.querySelector(".note-list");
+    let newNoteContainer = document.createElement("div");
+    noteListContainer.insertBefore(newNoteContainer, noteListContainer.firstChild);
+    newNoteContainer.outerHTML = noteHTML;
+    updateNoteList();
+}
+
 function setNoteControls(note) {
   let controls = note.container.querySelectorAll(".controls > *");
   for (let control of controls) {
@@ -61,11 +69,7 @@ function fetchLatestNotes() {
   ).then(
     (data) => {
       if (data !== "") {
-        let noteListContainer = document.querySelector(".note-list");
-        let newNoteContainer = document.createElement("div");
-        noteListContainer.insertBefore(newNoteContainer, noteListContainer.firstChild);
-        newNoteContainer.outerHTML = data;
-        updateNoteList();
+        prependToNoteList(data);
         showNotification("Fetched latest notes.");
       }
     }
@@ -160,11 +164,7 @@ function copyNoteToClipboard(note) {
 function bumpNote(note) {
   performBackendOperation(note, "bump", (data) => {
     note.container.remove();
-    let noteListContainer = document.querySelector(".note-list");
-    let newNoteContainer = document.createElement("div");
-    noteListContainer.insertBefore(newNoteContainer, noteListContainer.firstChild);
-    newNoteContainer.outerHTML = data;
-    updateNoteList();
+    prependToNoteList(data);
     showNotification("Note bumped.");
   });
 }

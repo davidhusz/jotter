@@ -74,11 +74,7 @@ function submitNoteForm() {
     .then(function(data) {
             hideNoteForm();
             contentBox.value = "";
-            let noteListContainer = document.querySelector(".note-list");
-            let newNoteContainer = document.createElement("div");
-            noteListContainer.insertBefore(newNoteContainer, noteListContainer.firstChild);
-            newNoteContainer.outerHTML = data;
-            updateNoteList();
+            prependToNoteList(data);
             showNotification("Note saved.");
           })
     .catch(function(error) {
