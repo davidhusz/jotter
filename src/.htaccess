@@ -1,7 +1,7 @@
 RewriteEngine on
 # API calls
 RewriteCond %{REQUEST_METHOD} =POST
-RewriteRule ^(post|trash|restore|bump|delete-permanently)$ /includes/$1.php [END]
+RewriteRule ^(post|bump|archive|trash|restore|delete-permanently)$ /includes/$1.php [END]
 # Locations
 # Allow if a (hidden) folder with the name of the requested location exists, or
 RewriteCond %{DOCUMENT_ROOT}/contents/.$1 -d [OR]

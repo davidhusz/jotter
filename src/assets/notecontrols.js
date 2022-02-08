@@ -43,6 +43,8 @@ function setNoteControls(note) {
         copyNoteToClipboard(note);
       } else if (controlType == "bump") {
         bumpNote(note);
+      } else if (controlType == "archive") {
+        archiveNote(note);
       } else if (controlType == "trash") {
         trashNote(note);
       }
@@ -141,14 +143,22 @@ function bumpNote(note) {
   });
 }
 
-function trashNote(note) {
-  sendBackendRequest("/trash", `id=${note.id}`, data => {
+function moveNote(note, destination) {
+  sendBackendRequest(`/${destination}`, `id=${note.id}`, data => {
     note.container.classList.add("removed");
-    showNotification("Note moved to trash. <span>Undo</span>", 7);
+    showNotification(`Note moved to ${destination}. <span>Undo</span>`, 7);
     document.querySelector(".notification span").addEventListener("click", () => {
       restoreNote(note);
     });
   });
+}
+
+function archiveNote(note) {
+  moveNote(note, "archive");
+}
+
+function trashNote(note) {
+  moveNote(note, "trash");
 }
 
 function restoreNote(note) {
